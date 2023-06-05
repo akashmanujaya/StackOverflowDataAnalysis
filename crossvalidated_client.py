@@ -2,7 +2,7 @@ import time
 import requests
 
 
-class StackOverflowClient:
+class CrossValidatedClient:
     BASE_URL = 'https://api.stackexchange.com/2.2/questions'
     PAGE_SIZE = 100
     MAX_PAGES = 100
@@ -14,7 +14,7 @@ class StackOverflowClient:
 
     def fetch_questions(self, page, tag):
         params = {
-            'site': 'stackoverflow',
+            'site': 'crossvalidated',
             'tagged': tag,
             'sort': 'creation',
             'key': self.ac_key,

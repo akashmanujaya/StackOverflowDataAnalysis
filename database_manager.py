@@ -30,8 +30,8 @@ class DatabaseManager:
                 view_count INT NOT NULL,
                 answer_count INT NOT NULL,
                 score INT NOT NULL,
-                creation_date INT NOT NULL,
-                last_edit_date INT,
+                creation_date DATETIME NOT NULL,
+                last_edit_date DATETIME,
                 source ENUM('stackoverflow', 'crossvalidated') NOT NULL,
                 user_id INT,
                 FOREIGN KEY(user_id) REFERENCES Users(user_id)
@@ -84,6 +84,8 @@ class DatabaseManager:
             answer_count=VALUES(answer_count), score=VALUES(score), creation_date=VALUES(creation_date), 
             last_edit_date=VALUES(last_edit_date), source=VALUES(source), user_id=VALUES(user_id)
         """
+
+
 
         data_tuple = (
             question['question_id'],
