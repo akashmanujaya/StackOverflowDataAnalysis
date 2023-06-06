@@ -1,10 +1,31 @@
+import os
+import pandas as pd
+
+from crossvalidated_client import CrossValidatedClient
 from database_manager import DatabaseManager
 from stackoverflow_client import StackOverflowClient
+from dotenv.main import load_dotenv
+from flask import Flask, render_template, jsonify
+from database import db
+from datetime import datetime
+from tag_service import get_popular_tags, get_tag_data
+
+load_dotenv()
+
+# Init Flask
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{os.environ["DB_USER"]}:{os.environ["DB_PASSWORD"]}@{os.environ["DB_HOST"]}/{os.environ["DB_NAME"]}'
+db.init_app(app)
 
 
-def main():
+def fetch_data():
     # Initialize a DatabaseManager instance with your database credentials
-    database_manager = DatabaseManager('root', '', 'localhost', 'stack_overflow_analysis')
+    database_manager = DatabaseManager(
+        os.environ['DB_USER'],
+        os.environ['DB_PASSWORD'],
+        os.environ['DB_HOST'],
+        os.environ['DB_NAME']
+    )
 
     # Create tables if they don't exist
     database_manager.create_tables()
@@ -19,7 +40,51 @@ def main():
             'feature-engineering', 'computer-vision', 'cross-validation', 'reinforcement-learning', 'svm',
             'text-mining', 'multiclass-classification', 'class-imbalance', 'loss-function', 'preprocessing',
             'optimization', 'recommender-system', 'word-embeddings', 'bigdata']
-    stackoverflow_client = StackOverflowClient(tags)
+
+    tags_crossvalidated = [
+        'r',
+        'regression',
+        'machine-learning',
+        'time-series',
+        'probability',
+        'hypothesis-testing',
+        'distributions',
+        'self-study',
+        'neural-networks',
+        'bayesian',
+        'logistic',
+        'mathematical-statistics',
+        'classification',
+        'correlation',
+        'statistical-significance',
+        'mixed-model',
+        'normal-distribution',
+        'multiple-regression',
+        'python',
+        'confidence-interval',
+        'generalized-linear-model',
+        'variance',
+        'clustering',
+        'forecasting',
+        'clustering',
+        'data-visualization',
+        'cross-validation',
+        'sampling',
+        'p-value',
+        'linear-model'
+    ]
+
+    stackoverflow_client = StackOverflowClient(
+        tags,
+        os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
+        os.environ['STACK_EXCHANGE_KEY']
+    )
+
+    crossvalidated_client = CrossValidatedClient(
+        tags_crossvalidated,
+        os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
+        os.environ['STACK_EXCHANGE_KEY']
+    )
 
     # Fetch questions from the API and insert them into the database
     for items in stackoverflow_client.fetch_all_questions():
@@ -27,6 +92,11 @@ def main():
             try:
                 if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
                     database_manager.insert_user(question['owner'])
+                    question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
+                        '%Y-%m-%d %H:%M:%S')
+                    if 'last_edit_date' in question:
+                        question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
+                            '%Y-%m-%d %H:%M:%S')
                     question['user_id'] = question['owner']['user_id']
                     question['source'] = 'stackoverflow'
                     database_manager.insert_question(question)
@@ -35,6 +105,58 @@ def main():
                 print(f"Error Occurred: {ex}")
                 print(question)
 
+    for items in crossvalidated_client.fetch_all_questions():
+        for question in items:
+            try:
+                if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
+                    database_manager.insert_user(question['owner'])
+                    question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
+                        '%Y-%m-%d %H:%M:%S')
+                    if 'last_edit_date' in question:
+                        question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
+                            '%Y-%m-%d %H:%M:%S')
+                    question['user_id'] = question['owner']['user_id']
+                    question['source'] = 'crossvalidated'
+                    database_manager.insert_question(question)
+                    database_manager.insert_tags(question['question_id'], question['tags'])
+            except Exception as ex:
+                print(f"Error Occurred: {ex}")
+                print(question)
+
+
+@app.route('/')
+def home():
+    return render_template('index.html')  # Replace with the HTML file containing your visualization
+
+
+@app.route('/api/tags')
+def tags():
+    return get_popular_tags()
+
+@app.route('/api/tags/<tag_name>')
+def tag_data(tag_name):
+    return get_tag_data(tag_name)
+
+@app.route('/data')
+def data():
+    sql = """
+    SELECT t.tag_name, DATE_FORMAT(q.creation_date, '%%Y-%%m') as date, COUNT(*) as count
+    FROM Questions q
+    JOIN QuestionTags qt ON q.question_id = qt.question_id
+    JOIN Tags t ON qt.tag_id = t.tag_id
+    GROUP BY t.tag_name, date
+    ORDER BY date
+    """
+    df = pd.read_sql(sql, db.engine)
+
+    # Pivot the data so that we have dates as index, tags as columns and counts as values
+    df_pivot = df.pivot(index='date', columns='tag_name', values='count').fillna(0)
+
+    # Convert DataFrame to dictionary
+    data_dict = df_pivot.to_dict()
+    return jsonify(data_dict)
+
 
 if __name__ == "__main__":
-    main()
+    # fetch_data()
+    app.run(debug=True)
