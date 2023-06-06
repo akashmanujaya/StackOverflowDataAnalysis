@@ -158,5 +158,5 @@ def data():
 
 
 if __name__ == "__main__":
-    # fetch_data()
-    app.run(debug=True)
+    fetch_data()
+    #app.run(debug=True)

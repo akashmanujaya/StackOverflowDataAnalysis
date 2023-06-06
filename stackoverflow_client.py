@@ -22,6 +22,7 @@ class StackOverflowClient:
             'page': page,
             'pagesize': self.PAGE_SIZE,
             'order': 'desc',
+            'filter': 'withbody'
         }
 
         response = requests.get(self.BASE_URL, params=params)

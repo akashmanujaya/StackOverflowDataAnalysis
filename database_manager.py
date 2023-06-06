@@ -26,6 +26,8 @@ class DatabaseManager:
             CREATE TABLE IF NOT EXISTS Questions (
                 question_id INT PRIMARY KEY,
                 title TEXT NOT NULL,
+                body LONGTEXT,
+                link TEXT,
                 is_answered BOOLEAN NOT NULL,
                 view_count INT NOT NULL,
                 answer_count INT NOT NULL,
@@ -77,10 +79,10 @@ class DatabaseManager:
 
     def insert_question(self, question):
         insert_query = """
-            INSERT INTO Questions (question_id, title, is_answered, view_count, answer_count, score, creation_date, last_edit_date, source, user_id) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
+            INSERT INTO Questions (question_id, title, body, link, is_answered, view_count, answer_count, score, creation_date, last_edit_date, source, user_id) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
             ON DUPLICATE KEY UPDATE 
-            title=VALUES(title), is_answered=VALUES(is_answered), view_count=VALUES(view_count), 
+            title=VALUES(title), body=VALUES(body), link=VALUES(link), is_answered=VALUES(is_answered), view_count=VALUES(view_count), 
             answer_count=VALUES(answer_count), score=VALUES(score), creation_date=VALUES(creation_date), 
             last_edit_date=VALUES(last_edit_date), source=VALUES(source), user_id=VALUES(user_id)
         """
@@ -90,6 +92,8 @@ class DatabaseManager:
         data_tuple = (
             question['question_id'],
             question['title'],
+            question['body'],
+            question['link'],
             question['is_answered'],
             question['view_count'],
             question['answer_count'],
