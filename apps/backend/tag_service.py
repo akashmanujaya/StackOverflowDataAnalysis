@@ -2,7 +2,7 @@
 
 from flask import jsonify
 from sqlalchemy import text
-from database import db
+from apps import db
 
 
 def get_popular_tags():
@@ -13,7 +13,7 @@ def get_popular_tags():
             JOIN QuestionTags ON Tags.tag_id = QuestionTags.tag_id
             GROUP BY Tags.tag_name
             ORDER BY COUNT(QuestionTags.question_id) DESC
-            LIMIT 50
+            LIMIT 10
         """)
         result = db.session.execute(sql)
         db.session.commit()
