@@ -11,9 +11,12 @@ class Config(object):
     # Set up the App SECRET_KEY
     SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_007')
 
-    # This will create a file in <app> FOLDER
-    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{os.environ["DB_USER"]}:{os.environ["DB_PASSWORD"]}@{os.environ["DB_HOST"]}/{os.environ["DB_NAME"]}'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # MongoDB database
+    MONGODB_SETTINGS = {
+        'db': os.environ["MONGO_DB_NAME"],
+        'host': os.environ["MONGO_DB_HOST"],
+        'port': int(os.environ["MONGO_DB_PORT"]),
+    }
 
 
 class ProductionConfig(Config):
@@ -24,8 +27,12 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_DURATION = 3600
 
-    # MySQL database
-    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{os.environ["DB_USER"]}:{os.environ["DB_PASSWORD"]}@{os.environ["DB_HOST"]}/{os.environ["DB_NAME"]}'
+    # MongoDB database
+    MONGODB_SETTINGS = {
+        'db': os.environ["MONGO_DB_NAME"],
+        'host': os.environ["MONGO_DB_HOST"],
+        'port': int(os.environ["MONGO_DB_PORT"]),
+    }
 
 
 class DebugConfig(Config):

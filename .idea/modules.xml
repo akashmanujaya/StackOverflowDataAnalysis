@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/StackOverflowDataAnalysis.iml" filepath="$PROJECT_DIR$/.idea/StackOverflowDataAnalysis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/StackOverflowDataAnalysis copy.iml" filepath="$PROJECT_DIR$/.idea/StackOverflowDataAnalysis copy.iml" />
     </modules>
   </component>
 </project>

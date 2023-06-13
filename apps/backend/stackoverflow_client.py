@@ -22,6 +22,7 @@ class StackOverflowClient:
             'page': page,
             'pagesize': self.PAGE_SIZE,
             'order': 'desc',
+            'filter': 'withbody'
         }
 
         response = requests.get(self.BASE_URL, params=params)
@@ -31,17 +32,23 @@ class StackOverflowClient:
 
     def fetch_all_questions(self):
         for tag in self.tags:
-            for page in range(1, self.MAX_PAGES + 1):
-                data = self.fetch_questions(page, tag)
-                print(f"page is: {page} and tag is: {tag}")
-                if 'items' in data:
-                    print(f"Length of data set is: {len(data['items'])}")
-                    yield data['items']
-                    if not data['has_more']:
-                        print(f'Stopping at page {page} because no more data is available')  # Log stopping condition
-                        break
-                # Check remaining quota and pause if it's low
-                if 'quota_remaining' in data and data['quota_remaining'] < 10:
-                    print('Quota remaining is low. Sleeping for 10 seconds...')
-                    time.sleep(10)
-                time.sleep(1)
+            try:
+                for page in range(1, self.MAX_PAGES + 1):
+                    data = self.fetch_questions(page, tag)
+                    print(f"page is: {page} and tag is: {tag}")
+                    if 'items' in data:
+                        print(f"Length of data set is: {len(data['items'])}")
+                        yield data['items']
+                        if not data['has_more']:
+                            print(f'Stopping at page {page} because no more data is available')  # Log stopping condition
+                            break
+                    # Check remaining quota and pause if it's low
+                    if 'quota_remaining' in data and data['quota_remaining'] < 10:
+                        print('Quota remaining is low. Sleeping for 10 seconds...')
+                        time.sleep(10)
+                    time.sleep(1)
+            except (ValueError, KeyError, Exception) as ex:
+                print(f"Something happened: {ex}")
+                continue
+
+

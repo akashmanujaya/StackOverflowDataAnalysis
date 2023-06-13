@@ -22,6 +22,7 @@ class CrossValidatedClient:
             'page': page,
             'pagesize': self.PAGE_SIZE,
             'order': 'desc',
+            'filter': 'withbody'
         }
 
         response = requests.get(self.BASE_URL, params=params)
@@ -45,3 +46,5 @@ class CrossValidatedClient:
                     print('Quota remaining is low. Sleeping for 10 seconds...')
                     time.sleep(10)
                 time.sleep(1)
+
+

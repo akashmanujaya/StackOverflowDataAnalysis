@@ -1,12 +1,7 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
 from apps.home import blueprint
 from flask import render_template, request
 from jinja2 import TemplateNotFound
-from apps.backend.tag_service import get_popular_tags, get_tag_data
+from apps.backend.api import get_popular_tags, get_tag_data, get_top_users, get_top_questions
 
 
 @blueprint.route('/')
@@ -18,14 +13,25 @@ def index():
 def tags():
     return get_popular_tags()
 
+
 @blueprint.route('/api/tags/<tag_name>')
 def tag_data(tag_name):
     return get_tag_data(tag_name)
 
+
+@blueprint.route('/api/top_users')
+def top_users():
+    return get_top_users()
+
+
+@blueprint.route('/api/top_questions')
+def top_questions():
+    return get_top_questions()
+
+
 @blueprint.route('/<template>')
 def route_template(template):
     try:
-
         if not template.endswith('.html'):
             pass
 
@@ -43,10 +49,9 @@ def route_template(template):
 
 
 # Helper - Extract current page name from request
-def get_segment(request):
+def get_segment(req):
     try:
-
-        segment = request.path.split('/')[-1]
+        segment = req.path.split('/')[-1]
 
         if segment == '':
             segment = 'index'

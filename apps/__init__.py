@@ -1,14 +1,6 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
-
-
-db = SQLAlchemy()
+from apps.backend.database import db
 
 
 def register_blueprints(app):
@@ -18,6 +10,7 @@ def register_blueprints(app):
 
 def create_app(config):
     app = Flask(__name__)
+    app.app_context().push()
     app.config.from_object(config)
     db.init_app(app)
     register_blueprints(app)
