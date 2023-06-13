@@ -1,0 +1,215 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-chart">
+          <div class="card-header ">
+            <div class="row">
+              <div class="col-sm-6 text-left">
+                <h5 class="card-category d-none show-after-data-load">Overall</h5>
+                <h2 class="card-title d-none show-after-data-load">Tags Trend</h2>
+              </div>
+              <div class="col-sm-6 d-none show-after-data-load">
+                <select class="form-control" id="tag-selector">
+                  <!-- tag options will be populated here -->
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas id="overall_trends"></canvas>
+              <!-- Spinner Overlay -->
+              <div id="spinner-overlay" class="spinner-overlay" style="display: none;">
+                <div class="lds-ripple"><div></div><div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+        <!--Table-top 5 users -->
+        <div class="col-lg-6 col-md-12 d-flex">
+        <div class="card ">
+            <div class="card-header">
+                <h4 class="card-title">Top 5 Users</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table tablesorter " id="top-users-table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th>
+                                    Avatar
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Reputation
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+      </div>
+        <!--Table-top 8 questions -->
+        <div class="col-lg-6 col-md-12 d-flex">
+        <div class="card ">
+            <div class="card-header">
+                <h4 class="card-title">Top 8 Questions</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table tablesorter " id="top-questions-table">
+                        <thead class=" text-primary">
+                            <tr>
+                                <th>
+                                    Title
+                                </th>
+                                <th>
+                                    View Count
+                                </th>
+                                <th>
+                                    Created User
+                                </th>
+                                <th>
+                                    Score
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+        $('#spinner-overlay').show();
+
+        $.getJSON('/api/tags', function(data) {
+          // Store first tag name
+          let firstTag;
+
+          data.forEach((tag_info, index) => {
+              let option = $('<option>').val(tag_info).text(tag_info);
+              $('#tag-selector').append(option);
+
+              // Capture the first tag name
+              if(index === 0) {
+                  firstTag = tag_info;
+              }
+          });
+
+          // Set the selected tag to the first tag and trigger change event
+          if(firstTag) {
+            $('#spinner-overlay').show();
+            fetchAndRenderData(firstTag).then(function() {
+                $('#spinner-overlay').hide();
+                $('.show-after-data-load').removeClass('d-none');
+            });
+          }
+        });
+
+        $('#tag-selector').change(function() {
+          $('#spinner-overlay').show();
+          let selectedTag = $(this).val();
+          if (selectedTag === 'All') {
+              // Fetch and render trends for all tags
+              $.getJSON('/api/tags', function(data) {
+                  let fetchPromises = data.map(fetchAndRenderData);
+                  $.when(...fetchPromises).then(function() {
+                      $('#spinner-overlay').hide();
+                  });
+              });
+          } else {
+              // Fetch and render trend for the selected tag
+              fetchAndRenderData(selectedTag).then(function() {
+                  $('#spinner-overlay').hide();
+              });
+          }
+
+        });
+
+        function fetchAndRenderData(tag) {
+            let deferred = $.Deferred();
+
+            $.getJSON('/api/tags/' + tag, function(data) {
+                demo.initFirstOverallTrendChart(data.map(item => item[0]), data.map(item => item[1]));
+                deferred.resolve();
+            });
+
+            return deferred.promise();
+        }
+
+        //get data for users table in dashboard
+        $.getJSON('/api/top_users', function(data) {
+            let topUsersTableBody = $('#top-users-table tbody');
+            topUsersTableBody.empty();
+            data.forEach(user => {
+                let userRow = `<tr>
+                    <td>
+                        <img src="${user.profile_image}" alt="Avatar" width="50" height="50">
+                    </td>
+                    <td>
+                        <a href="${user.link}" target="_blank">${user.display_name}</a>
+                    </td>
+                    <td>
+                        ${user.reputation.toLocaleString()}
+                    </td>
+                </tr>`;
+                topUsersTableBody.append(userRow);
+            });
+        });
+
+        //get data for questions table in dashboard
+        $.getJSON('/api/top_questions', function(data) {
+            let topQuestionsTableBody = $('#top-questions-table tbody');
+            topQuestionsTableBody.empty();
+            data.forEach(question => {
+                let questionRow = `<tr>
+                    <td>
+                        <a href="${question.link}" target="_blank">${question.title.substring(0, 30)}...</a>
+                    </td>
+                    <td>
+                        ${question.view_count.toLocaleString()}
+                    </td>
+                    <td>
+                        <a href="${question.user.link}" target="_blank">${question.user.display_name}</a>
+                    </td>
+                    <td>
+                        ${question.score.toLocaleString()}
+                    </td>
+                </tr>`;
+                topQuestionsTableBody.append(questionRow);
+            });
+        });
+
+    });
+  </script>
+
+{% endblock javascripts %}
