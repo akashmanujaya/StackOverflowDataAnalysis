@@ -1,5 +1,6 @@
 from flask_mongoengine import MongoEngine
-from mongoengine import signals
+
+# from mongoengine import signals
 
 db = MongoEngine()
 
@@ -20,7 +21,6 @@ class Tag(db.Document):
         return self.tag_name
 
 
-
 class Question(db.Document):
     question_id = db.IntField(primary_key=True)
     link = db.StringField(required=True)
@@ -36,6 +36,11 @@ class Question(db.Document):
     user = db.ReferenceField(User)
     tags = db.ListField(db.ReferenceField(Tag))
 
+    meta = {
+        'indexes': ['tags']
+    }
+
+
 def update_tag_length(sender, document, **kwargs):
     # Get all tags of the question
     tags = document.tags
@@ -46,4 +51,4 @@ def update_tag_length(sender, document, **kwargs):
         tag.save()
 
 # Connect the signal
-signals.post_save.connect(update_tag_length, sender=Question)
+# signals.post_save.connect(update_tag_length, sender=Question)

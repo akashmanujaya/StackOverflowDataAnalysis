@@ -1,7 +1,7 @@
 from apps import create_app
 from decouple import config
 from apps.config import config_dict
-from apps.backend.fetch_data import fetch_data
+from apps.backend.services.tasks import fetch_data
 
 # WARNING: Don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
@@ -25,5 +25,5 @@ if DEBUG:
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=5003)
-    # fetch_data()
+    # fetch_data.delay()
 

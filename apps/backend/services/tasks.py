@@ -1,19 +1,55 @@
-from apps.backend.crossvalidated_client import CrossValidatedClient
-from apps.backend.stackoverflow_client import StackOverflowClient
+from celery import Celery
+from mongoengine import connect
+from dotenv import load_dotenv
+from apps.backend.clients.crossvalidated_client import CrossValidatedClient
+from apps.backend.clients.stackoverflow_client import StackOverflowClient
 from apps.backend.database_manager import DatabaseManager
-from dotenv.main import load_dotenv
+from apps.backend.database import Tag, Question
 from datetime import datetime
 import os
 
+# Load .env file
 load_dotenv()
 
+# Database Manager
+database_manager = DatabaseManager()
 
+# Replace these with your MongoDB settings
+db_name = os.environ["MONGO_DB_NAME"]
+host = os.environ["MONGO_DB_HOST"]
+port = int(os.environ["MONGO_DB_PORT"])
+
+# Initialize Celery
+celery_app = Celery(__name__, broker='pyamqp://guest@localhost//')
+
+# Update tags length every hour
+celery_app.conf.beat_schedule = {
+    'fetch_data': {
+        'task': 'apps.backend.services.tasks.fetch_data',
+        'schedule': 60.0 * 60.0,
+    },
+}
+
+
+@celery_app.task(name="apps.backend.services.tasks.update_tags_length")
+def update_tags_length():
+    # Establish a connection to the MongoDB server
+    connect(db=db_name, host=host, port=port)
+
+    # Your original code
+    tags = Tag.objects.all()
+    for tag in tags:
+        tag.tags_length = Question.objects(tags=tag).count()
+        tag.save()
+
+
+@celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
-    # Initialize a DatabaseManager instance with your database credentials
-    database_manager = DatabaseManager()
+    # Establish a connection to the MongoDB server
+    connect(db=db_name, host=host, port=port)
 
-    # Create tables if they don't exist
-    # database_manager.create_tables()
+    # Initialize a DatabaseManager instance with your database credentials
+    db_manager = DatabaseManager()
 
     # Initialize a StackOverflowClient instance with the tags you're interested in
     stack_overflow_tags = ['loss-function', 'preprocessing', 'optimization',
@@ -33,7 +69,7 @@ def fetch_data():
         os.environ['STACK_EXCHANGE_KEY']
     )
 
-    crossvalidated_client = CrossValidatedClient(
+    cross_validated_client = CrossValidatedClient(
         cross_validated_tags,
         os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
         os.environ['STACK_EXCHANGE_KEY']
@@ -43,7 +79,7 @@ def fetch_data():
         for question in items:
             try:
                 if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
-                    user = database_manager.insert_user(question['owner'])
+                    user = db_manager.insert_user(question['owner'])
                     question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
                         '%Y-%m-%d %H:%M:%S')
                     if 'last_edit_date' in question:
@@ -51,16 +87,16 @@ def fetch_data():
                             '%Y-%m-%d %H:%M:%S')
                     question['user'] = user
                     question['source'] = 'stackoverflow'
-                    tags = [database_manager.get_or_create_tag(tag) for tag in question['tags']]
-                    database_manager.insert_question(question, tags)
+                    tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
+                    db_manager.insert_question(question, tags)
             except Exception as ex:
                 print(f"Error Occurred: {ex}")
 
-    for items in crossvalidated_client.fetch_all_questions():
+    for items in cross_validated_client.fetch_all_questions():
         for question in items:
             try:
                 if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
-                    user = database_manager.insert_user(question['owner'])
+                    user = db_manager.insert_user(question['owner'])
                     question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
                         '%Y-%m-%d %H:%M:%S')
                     if 'last_edit_date' in question:
@@ -68,8 +104,11 @@ def fetch_data():
                             '%Y-%m-%d %H:%M:%S')
                     question['user'] = user
                     question['source'] = 'crossvalidated'
-                    tags = [database_manager.get_or_create_tag(tag) for tag in question['tags']]
-                    database_manager.insert_question(question, tags)
+                    tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
+                    db_manager.insert_question(question, tags)
             except Exception as ex:
                 print(f"Error Occurred: {ex}")
+
+    # Invoke update_tags_length when fetch_data finishes
+    update_tags_length.delay()
 
