@@ -1,7 +1,6 @@
 from apps import create_app
 from decouple import config
 from apps.config import config_dict
-from apps.backend.services.tasks import fetch_data
 
 # WARNING: Don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)

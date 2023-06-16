@@ -1,8 +1,28 @@
 from flask import jsonify
 from apps.backend.database import User, Question, Tag
+import os
+from urllib.parse import quote_plus
+from dotenv import load_dotenv
+from mongoengine import connect, disconnect
+
+# Load .env file
+load_dotenv()
+
+# Replace these with your MongoDB settings
+db_name = quote_plus(os.environ["MONGO_DB_NAME"])
+username = quote_plus(os.environ["MONGO_DB_USER"])
+password = quote_plus(os.environ["MONGO_DB_PASSWORD"])
+host = os.environ["MONGO_DB_HOST"]
+
+
+def handle_database_connection():
+    disconnect()
+    connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
 
 
 def get_top_users():
+    handle_database_connection()
+
     # Get top 7 users based on reputation
     result = User.objects().order_by('-reputation')[:5]
     return jsonify([
@@ -17,6 +37,7 @@ def get_top_users():
 
 
 def get_top_questions():
+    handle_database_connection()
     # Get top 7 questions based on score
     result = Question.objects().order_by('-score')[:8]
     return jsonify([
@@ -32,6 +53,7 @@ def get_top_questions():
 
 
 def get_popular_tags():
+    handle_database_connection()
     try:
         # Get top 10 tags based on the number of questions associated with them
         result = Tag.objects().order_by('-tags_length')[:10]
@@ -41,6 +63,7 @@ def get_popular_tags():
 
 
 def get_tag_data(tag_name):
+    handle_database_connection()
     # Get the tag with tag_name
     tag = Tag.objects(tag_name=tag_name).first()
 

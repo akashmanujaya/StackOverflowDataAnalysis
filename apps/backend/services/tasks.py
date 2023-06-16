@@ -7,17 +7,16 @@ from apps.backend.database_manager import DatabaseManager
 from apps.backend.database import Tag, Question
 from datetime import datetime
 import os
+from urllib.parse import quote_plus
 
 # Load .env file
 load_dotenv()
 
-# Database Manager
-database_manager = DatabaseManager()
-
 # Replace these with your MongoDB settings
-db_name = os.environ["MONGO_DB_NAME"]
+db_name = quote_plus(os.environ["MONGO_DB_NAME"])
+username = quote_plus(os.environ["MONGO_DB_USER"])
+password = quote_plus(os.environ["MONGO_DB_PASSWORD"])
 host = os.environ["MONGO_DB_HOST"]
-port = int(os.environ["MONGO_DB_PORT"])
 
 # Initialize Celery
 celery_app = Celery(__name__, broker='pyamqp://guest@localhost//')
@@ -34,7 +33,7 @@ celery_app.conf.beat_schedule = {
 @celery_app.task(name="apps.backend.services.tasks.update_tags_length")
 def update_tags_length():
     # Establish a connection to the MongoDB server
-    connect(db=db_name, host=host, port=port)
+    connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
 
     # Your original code
     tags = Tag.objects.all()
@@ -46,7 +45,7 @@ def update_tags_length():
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
     # Establish a connection to the MongoDB server
-    connect(db=db_name, host=host, port=port)
+    connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
 
     # Initialize a DatabaseManager instance with your database credentials
     db_manager = DatabaseManager()

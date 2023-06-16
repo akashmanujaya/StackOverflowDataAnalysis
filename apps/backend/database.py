@@ -1,7 +1,5 @@
 from flask_mongoengine import MongoEngine
 
-# from mongoengine import signals
-
 db = MongoEngine()
 
 
@@ -39,16 +37,3 @@ class Question(db.Document):
     meta = {
         'indexes': ['tags']
     }
-
-
-def update_tag_length(sender, document, **kwargs):
-    # Get all tags of the question
-    tags = document.tags
-
-    for tag in tags:
-        # Count the number of questions for each tag and save
-        tag.tags_length = Question.objects(tags=tag).count()
-        tag.save()
-
-# Connect the signal
-# signals.post_save.connect(update_tag_length, sender=Question)

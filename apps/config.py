@@ -16,6 +16,8 @@ class Config(object):
         'db': os.environ["MONGO_DB_NAME"],
         'host': os.environ["MONGO_DB_HOST"],
         'port': int(os.environ["MONGO_DB_PORT"]),
+        'username': os.environ["MONGO_DB_USER"],
+        'password': os.environ["MONGO_DB_PASSWORD"]
     }
 
 
@@ -32,6 +34,8 @@ class ProductionConfig(Config):
         'db': os.environ["MONGO_DB_NAME"],
         'host': os.environ["MONGO_DB_HOST"],
         'port': int(os.environ["MONGO_DB_PORT"]),
+        'username': os.environ["MONGO_DB_USER"],
+        'password': os.environ["MONGO_DB_PASSWORD"]
     }
 
 
