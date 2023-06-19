@@ -29,15 +29,6 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_DURATION = 3600
 
-    # MongoDB database
-    MONGODB_SETTINGS = {
-        'db': os.environ["MONGO_DB_NAME"],
-        'host': os.environ["MONGO_DB_HOST"],
-        'port': int(os.environ["MONGO_DB_PORT"]),
-        'username': os.environ["MONGO_DB_USER"],
-        'password': os.environ["MONGO_DB_PASSWORD"]
-    }
-
 
 class DebugConfig(Config):
     DEBUG = True

@@ -21,23 +21,25 @@ def handle_database_connection():
 
 
 def get_top_users():
-    handle_database_connection()
+    # handle_database_connection()
 
     # Get top 7 users based on reputation
     result = User.objects().order_by('-reputation')[:5]
-    return jsonify([
-        {
-            'user_id': str(user.id),
-            'display_name': user.display_name,
-            'profile_image': user.profile_image,
-            'reputation': user.reputation,
-            'link': user.link
-        } for user in result
-    ])
+    return [serialize_user(user) for user in result]
+
+
+def serialize_user(user):
+    return {
+        'user_id': str(user.id),
+        'display_name': user.display_name,
+        'profile_image': user.profile_image,
+        'reputation': user.reputation,
+        'link': user.link
+    }
 
 
 def get_top_questions():
-    handle_database_connection()
+    # handle_database_connection()
     # Get top 7 questions based on score
     result = Question.objects().order_by('-score')[:8]
     return jsonify([
@@ -45,7 +47,7 @@ def get_top_questions():
             'question_id': str(question.id),
             'title': question.title,
             'view_count': question.view_count,
-            'user': question.user,
+            'user': serialize_user(question.user),
             'score': question.score,
             'link': question.link,
         } for question in result
@@ -53,7 +55,7 @@ def get_top_questions():
 
 
 def get_popular_tags():
-    handle_database_connection()
+    # handle_database_connection()
     try:
         # Get top 10 tags based on the number of questions associated with them
         result = Tag.objects().order_by('-tags_length')[:10]
@@ -63,7 +65,7 @@ def get_popular_tags():
 
 
 def get_tag_data(tag_name):
-    handle_database_connection()
+    # handle_database_connection()
     # Get the tag with tag_name
     tag = Tag.objects(tag_name=tag_name).first()
 

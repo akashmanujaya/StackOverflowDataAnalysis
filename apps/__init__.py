@@ -2,6 +2,8 @@ from flask import Flask
 from importlib import import_module
 from apps.backend.database import db
 
+from mongoengine import connect, disconnect
+
 
 def register_blueprints(app):
     module = import_module('apps.home.routes')
@@ -12,6 +14,12 @@ def create_app(config):
     app = Flask(__name__)
     app.app_context().push()
     app.config.from_object(config)
-    db.init_app(app)
+    handle_database_connection(app.config['MONGODB_SETTINGS'])
+
     register_blueprints(app)
     return app
+
+
+def handle_database_connection(mongodb_settings):
+    disconnect()
+    connect(host=f"mongodb+srv://{mongodb_settings['username']}:{mongodb_settings['password']}@{mongodb_settings['host']}/{mongodb_settings['db']}?retryWrites=true&w=majority")
