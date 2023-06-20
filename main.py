@@ -2,6 +2,7 @@ from apps import create_app
 from decouple import config
 from apps.config import config_dict
 from apps.backend.services.tasks import fetch_data
+from apps.backend.services.complexity_score import ComplexityAnalyzer
 
 # WARNING: Don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
@@ -24,6 +25,8 @@ if DEBUG:
     app.logger.info('Environment = ' + get_config_mode)
 
 if __name__ == "__main__":
-    # app.run(host='127.0.0.1', port=5003)
-    fetch_data.delay()
+    app.run(host='127.0.0.1', port=5003)
+    # a = ComplexityAnalyzer()
+    # a.update_question_complexity()
+    # fetch_data.delay()
 

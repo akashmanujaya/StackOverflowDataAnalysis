@@ -1,0 +1,44 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-chart">
+          <div class="card-header ">
+            <div class="row">
+              <div class="col-sm-6 text-left">
+                <h5 class="card-category d-none show-after-data-load">Overall</h5>
+                <h2 class="card-title d-none show-after-data-load">Tags Trend</h2>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <canvas id="complexity_histogram"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+    $(document).ready(function() {
+      $.getJSON('/api/complexity_scores', function(data) {
+        let labels = data.map(item => item.x);
+        let frequencies = data.map(item => item.y);
+
+        charts.initComplexityHistogram(labels, frequencies);
+      });
+    });
+</script>
+
+{% endblock javascripts %}

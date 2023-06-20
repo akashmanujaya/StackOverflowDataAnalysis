@@ -33,6 +33,7 @@ class Question(db.Document):
     source = db.StringField(choices=('stackoverflow', 'crossvalidated'), required=True)
     user = db.ReferenceField(User)
     tags = db.ListField(db.ReferenceField(Tag))
+    complexity_score = db.FloatField()
 
     meta = {
         'indexes': ['tags']

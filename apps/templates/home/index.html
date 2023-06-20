@@ -159,7 +159,7 @@
             let deferred = $.Deferred();
 
             $.getJSON('/api/tags/' + tag, function(data) {
-                demo.initFirstOverallTrendChart(data.map(item => item[0]), data.map(item => item[1]));
+                charts.initFirstOverallTrendChart(data.map(item => item[0]), data.map(item => item[1]));
                 deferred.resolve();
             });
 

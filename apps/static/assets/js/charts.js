@@ -1,6 +1,6 @@
-demo = {
-  overallTrendChart: null,
-  initFirstOverallTrendChart: function(x_axis, y_axis){
+charts = {
+    overallTrendChart: null,
+    initFirstOverallTrendChart: function(x_axis, y_axis){
     let chartConfig = {
       maintainAspectRatio: false,
       legend: {
@@ -84,5 +84,38 @@ demo = {
     }
 
     this.overallTrendChart = new Chart(ctx, config);
-  }
+  },
+
+    initComplexityHistogram: function(labels, frequencies){
+    let ctx = document.getElementById("complexity_histogram").getContext('2d');
+
+    let config = {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Frequency",
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+          data: frequencies,
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    };
+
+    new Chart(ctx, config);
+}
+
 };
+
+

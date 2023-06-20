@@ -3,7 +3,8 @@ from apps.backend.database import User, Question, Tag
 import os
 from urllib.parse import quote_plus
 from dotenv import load_dotenv
-from mongoengine import connect, disconnect
+from collections import Counter
+import numpy as np
 
 # Load .env file
 load_dotenv()
@@ -15,14 +16,7 @@ password = quote_plus(os.environ["MONGO_DB_PASSWORD"])
 host = os.environ["MONGO_DB_HOST"]
 
 
-def handle_database_connection():
-    disconnect()
-    connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
-
-
 def get_top_users():
-    # handle_database_connection()
-
     # Get top 7 users based on reputation
     result = User.objects().order_by('-reputation')[:5]
     return [serialize_user(user) for user in result]
@@ -39,7 +33,6 @@ def serialize_user(user):
 
 
 def get_top_questions():
-    # handle_database_connection()
     # Get top 7 questions based on score
     result = Question.objects().order_by('-score')[:8]
     return jsonify([
@@ -55,7 +48,6 @@ def get_top_questions():
 
 
 def get_popular_tags():
-    # handle_database_connection()
     try:
         # Get top 10 tags based on the number of questions associated with them
         result = Tag.objects().order_by('-tags_length')[:10]
@@ -65,7 +57,6 @@ def get_popular_tags():
 
 
 def get_tag_data(tag_name):
-    # handle_database_connection()
     # Get the tag with tag_name
     tag = Tag.objects(tag_name=tag_name).first()
 
@@ -85,3 +76,22 @@ def get_tag_data(tag_name):
     # Sort the data by year and convert to the required format
     sorted_data = sorted(data.items(), key=lambda x: x[0])
     return jsonify([(str(year), count) for year, count in sorted_data])
+
+
+def get_complexity_scores():
+    scores = [item['complexity_score'] for item in Question.objects().only('complexity_score')]
+
+    # Set up the bins for the histogram
+    bins = np.linspace(0, 1, 11)  # create 10 equally spaced bins between 0 and 1
+    bins_labels = ["{:.1f} - {:.1f}".format(bins[i], bins[i + 1]) for i in range(len(bins) - 1)]  # Create bin labels
+
+    # Digitize the data (assign each score to a bin)
+    digitized = np.digitize(scores, bins)
+
+    # Count the number of scores in each bin
+    frequency_counts = Counter(digitized)
+
+    # Prepare the data for the chart
+    chart_data = [{'x': bins_labels[i - 1], 'y': frequency_counts[i]} for i in range(1, len(bins))]
+
+    return jsonify(chart_data)

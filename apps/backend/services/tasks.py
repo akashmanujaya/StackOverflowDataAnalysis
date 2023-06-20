@@ -5,6 +5,7 @@ from apps.backend.clients.crossvalidated_client import CrossValidatedClient
 from apps.backend.clients.stackoverflow_client import StackOverflowClient
 from apps.backend.database_manager import DatabaseManager
 from apps.backend.database import Tag, Question
+from apps.backend.services.complexity_score import ComplexityAnalyzer
 from datetime import datetime
 import os
 from urllib.parse import quote_plus
@@ -29,11 +30,13 @@ celery_app.conf.beat_schedule = {
     },
 }
 
+connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
+
 
 @celery_app.task(name="apps.backend.services.tasks.update_tags_length")
 def update_tags_length():
     # Establish a connection to the MongoDB server
-    connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
+    # connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
 
     # Your original code
     tags = Tag.objects.all()
@@ -42,10 +45,22 @@ def update_tags_length():
         tag.save()
 
 
+@celery_app.task(name="apps.backend.services.tasks.update_complexity_score")
+def update_complexity_score():
+    # Establish a connection to the MongoDB server
+    # connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
+
+    # Initialize a ComplexityAnalyzer instance
+    complexity_analyzer = ComplexityAnalyzer()
+
+    # Update complexity scores
+    complexity_analyzer.update_question_complexity()
+
+
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
     # Establish a connection to the MongoDB server
-    connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
+    # connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
 
     # Initialize a DatabaseManager instance with your database credentials
     db_manager = DatabaseManager()
@@ -151,3 +166,5 @@ def fetch_data():
     # Invoke update_tags_length when fetch_data finishes
     update_tags_length.delay()
 
+    # Invoke update_complexity_score when update_tags_length finishes
+    update_complexity_score.delay()
