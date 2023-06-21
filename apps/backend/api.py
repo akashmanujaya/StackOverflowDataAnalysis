@@ -95,3 +95,9 @@ def get_complexity_scores():
     chart_data = [{'x': bins_labels[i - 1], 'y': frequency_counts[i]} for i in range(1, len(bins))]
 
     return jsonify(chart_data)
+
+
+def get_score_complexity():
+    data = Question.objects().only('score', 'complexity_score')
+    response = [{'x': item.complexity_score, 'y': item.score} for item in data]
+    return jsonify(response)

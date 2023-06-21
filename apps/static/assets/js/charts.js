@@ -114,8 +114,38 @@ charts = {
     };
 
     new Chart(ctx, config);
-}
+},
 
+    initScoreComplexityScatter: function(data){
+        let ctx = document.getElementById("score_vs_complexity_scatter").getContext('2d');
+
+        let config = {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: "Score vs Complexity",
+            data: data,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            xAxes: [{
+              type: 'linear',
+              position: 'bottom',
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      };
+
+        new Chart(ctx, config);
+    }
 };
 
 

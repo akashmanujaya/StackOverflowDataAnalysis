@@ -13404,3 +13404,6 @@ Copyright (c) 2015 Daniel Eden
   }
 }
 
+.height-60vh{
+  height: 60vh !important;
+}

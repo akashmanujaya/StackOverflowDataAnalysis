@@ -19,11 +19,42 @@
             </div>
           </div>
           <div class="card-body">
-            <canvas id="complexity_histogram"></canvas>
+              <div class="chart-area height-60vh">
+                  <canvas id="complexity_histogram" class="height-60vh"></canvas>
+                  <!-- Spinner Overlay -->
+                  <div id="spinner-overlay" class="spinner-overlay" style="display: none;">
+                    <div class="lds-ripple"><div></div><div></div></div>
+                  </div>
+                </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-md-12 d-flex">
+            <div class="card card-chart">
+              <div class="card-header ">
+                <div class="row">
+                  <div class="col-sm-6 text-left">
+                    <h5 class="card-category d-none show-after-data-load">Overall</h5>
+                    <h2 class="card-title d-none show-after-data-load">Tags Trend</h2>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                  <div class="chart-area">
+                    <canvas id="score_vs_complexity_scatter"></canvas>
+                    <!-- Spinner Overlay -->
+                    <div id="scatter-spinner-overlay" class="spinner-overlay" style="display: none;">
+                      <div class="lds-ripple"><div></div><div></div></div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
 
 {% endblock content %}
 
@@ -32,13 +63,26 @@
 
 <script>
     $(document).ready(function() {
-      $.getJSON('/api/complexity_scores', function(data) {
-        let labels = data.map(item => item.x);
-        let frequencies = data.map(item => item.y);
+        $('#spinner-overlay').show();
+        $('#scatter-spinner-overlay').show();
 
-        charts.initComplexityHistogram(labels, frequencies);
-      });
+        $.getJSON('/api/complexity_scores', function(data) {
+            let labels = data.map(item => item.x);
+            let frequencies = data.map(item => item.y);
+
+            $('#spinner-overlay').hide();
+
+            setTimeout(function() {
+                charts.initComplexityHistogram(labels, frequencies);
+            }, 0);
+        });
+
+        $.getJSON('/api/score_complexity', function(data) {
+            charts.initScoreComplexityScatter(data);
+            $('#scatter-spinner-overlay').hide();
+        });
     });
 </script>
+
 
 {% endblock javascripts %}
