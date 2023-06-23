@@ -12,3 +12,4 @@ textblob~=0.17.1
 textstat~=0.7.3
 pymongo~=4.3.3
 numpy~=1.25.0
+scipy~=1.10.1

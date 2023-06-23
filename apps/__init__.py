@@ -22,4 +22,11 @@ def create_app(config):
 
 def handle_database_connection(mongodb_settings):
     disconnect()
-    connect(host=f"mongodb+srv://{mongodb_settings['username']}:{mongodb_settings['password']}@{mongodb_settings['host']}/{mongodb_settings['db']}?retryWrites=true&w=majority")
+    # connect(host=f"mongodb+srv://{mongodb_settings['username']}:{mongodb_settings['password']}@{mongodb_settings['host']}/{mongodb_settings['db']}?retryWrites=true&w=majority")
+    connect(
+        db=mongodb_settings['db'],  # Replace with your database name
+        host='localhost',  # Replace with your MongoDB server host
+        port=27017,  # Replace with your MongoDB server port
+        # username='your_username',  # Replace with your MongoDB username if required
+        # password='your_password',  # Replace with your MongoDB password if required
+    )

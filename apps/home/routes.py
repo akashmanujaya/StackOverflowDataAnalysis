@@ -1,7 +1,7 @@
 from apps.home import blueprint
 from flask import render_template, request
 from jinja2 import TemplateNotFound
-from apps.backend.api import get_popular_tags, get_tag_data, get_top_users, get_top_questions, get_complexity_scores, get_score_complexity
+from apps.backend.api import *
 
 
 @blueprint.route('/')
@@ -32,6 +32,16 @@ def tags():
 @blueprint.route('/api/tags/<tag_name>')
 def tag_data(tag_name):
     return get_tag_data(tag_name)
+
+
+@blueprint.route('/api/complexity_quartile_over_time')
+def complexity_quartile_over_time():
+    return get_complexity_quartile_over_time()
+
+
+@blueprint.route('/api/tag_statistics')
+def tag_statistics():
+    return get_tag_statistics()
 
 
 @blueprint.route('/api/top_users')

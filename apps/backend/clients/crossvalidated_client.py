@@ -5,7 +5,7 @@ import requests
 class CrossValidatedClient:
     BASE_URL = 'https://api.stackexchange.com/2.2/questions'
     PAGE_SIZE = 100
-    MAX_PAGES = 10
+    MAX_PAGES = 1
 
     def __init__(self, tags, access_token, key):
         self.tags = tags

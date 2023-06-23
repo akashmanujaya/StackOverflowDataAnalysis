@@ -1321,6 +1321,9 @@ pre {
     background-color: rgba(255, 255, 255, 0.075); }
 
 @media (max-width: 575.98px) {
+  .check-complexity{
+      width: inherit !important;
+    }
   .table-responsive-sm {
     display: block;
     width: 100%;
@@ -1330,6 +1333,9 @@ pre {
       border: 0; } }
 
 @media (max-width: 767.98px) {
+  .check-complexity{
+      width: inherit !important;
+    }
   .table-responsive-md {
     display: block;
     width: 100%;
@@ -1339,6 +1345,9 @@ pre {
       border: 0; } }
 
 @media (max-width: 991.98px) {
+  .check-complexity{
+      width: inherit !important;
+    }
   .table-responsive-lg {
     display: block;
     width: 100%;
@@ -1781,8 +1790,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #ffffff;
-  background-color: #e14eca;
-  border-color: #e14eca;
+  background-color: #FD7700FF;
+  border-color: #f84d4d;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); }
   .btn-primary:hover {
     color: #ffffff;
@@ -4982,7 +4991,7 @@ button.bg-default:focus {
   background-color: #243152 !important; }
 
 .bg-white {
-  background-color: #ffffff !important; }
+  background-color: rgba(255, 255, 255, 0) !important; }
 
 a.bg-white:hover, a.bg-white:focus,
 button.bg-white:hover,
@@ -5006,7 +5015,7 @@ button.bg-darker:focus {
   background-color: black !important; }
 
 .bg-white {
-  background-color: #ffffff !important; }
+  background-color: rgba(255, 255, 255, 0) !important; }
 
 .bg-transparent {
   background-color: transparent !important; }
@@ -8633,8 +8642,8 @@ a.text-darker:hover, a.text-darker:focus {
     margin-left: 30px !important; }
 
 .btn-primary {
-  background: #e14eca;
-  background-image: linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca);
+  background: #FD7700FF;
+  background-image: linear-gradient(to bottom left, #FD7700FF, #f84d4d, #FD7700FF);
   background-size: 210% 210%;
   background-position: top right;
   background-color: #e14eca;
@@ -8645,9 +8654,9 @@ a.text-darker:hover, a.text-darker:focus {
     background-position: bottom left;
     transition: 0.3s ease-in-out; }
   .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .btn-primary:active:focus, .btn-primary:active:hover, .btn-primary.active:focus, .btn-primary.active:hover {
-    background-color: #ba54f5 !important;
-    background-image: linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca) !important;
-    background-image: -moz-linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca) !important;
+    background-color: #FD7700FF !important;
+    background-image: linear-gradient(to bottom left, #FD7700FF, #f84d4d, #FD7700FF) !important;
+    background-image: -moz-linear-gradient(to bottom left, #FD7700FF, #f84d4d, #FD7700FF) !important;
     color: #ffffff;
     box-shadow: none; }
   .btn-primary:active {
@@ -13404,6 +13413,28 @@ Copyright (c) 2015 Daniel Eden
   }
 }
 
-.height-60vh{
-  height: 60vh !important;
+.height-100vh{
+  height: 100vh !important;
+}
+
+.height-min-content{
+  height: min-content !important;
+}
+
+.link_with_underline{
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+.link_with_underline:hover{
+ color: #ff6e4c !important;
+}
+
+.modal-content{
+  background-color: #252739 !important;
+  border: 2px solid #ee842a !important;
+}
+
+.model-margin-top {
+    margin-top: -1rem;
 }

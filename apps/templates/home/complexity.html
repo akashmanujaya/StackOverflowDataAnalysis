@@ -8,19 +8,70 @@
 {% block content %}
 
     <div class="row">
+        <div class="col-lg-12 col-md-12 text-right">
+            <button type="submit" name="check_complexity" id="check_complexity" class="btn btn-fill btn-primary check-complexity mb-2">Check Complexity</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-md-12 d-flex">
+            <div class="card card-chart">
+              <div class="card-header ">
+                <div class="row">
+                  <div class="col-sm-12 text-left">
+                    <h5 class="card-category show-after-data-load">Scatter plot of random sample of 1000</h5>
+                    <h3 class="card-title show-after-data-load">Complexity Score vs Question Score</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                  <div class="chart-area height-min-content">
+                    <canvas id="score_vs_complexity_scatter"></canvas>
+                    <!-- Spinner Overlay -->
+                    <div id="scatter-spinner-overlay" class="spinner-overlay" style="display: none;">
+                      <div class="lds-ripple"><div></div><div></div></div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12 d-flex">
+            <div class="card card-chart">
+              <div class="card-header ">
+                <div class="row">
+                  <div class="col-sm-12 text-left">
+                    <h5 class="card-category show-after-data-load">Last 10 years</h5>
+                    <h3 class="card-title show-after-data-load">Complexity Quartile Over Time</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                  <div class="chart-area height-min-content">
+                    <canvas id="complexity_quartile_over_time"></canvas>
+                    <!-- Spinner Overlay -->
+                    <div id="complexity_quartile_over_time_overlay" class="spinner-overlay" style="display: none;">
+                      <div class="lds-ripple"><div></div><div></div></div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
       <div class="col-12">
         <div class="card card-chart">
-          <div class="card-header ">
+          <div class="card-header">
             <div class="row">
               <div class="col-sm-6 text-left">
-                <h5 class="card-category d-none show-after-data-load">Overall</h5>
-                <h2 class="card-title d-none show-after-data-load">Tags Trend</h2>
+                <h5 class="card-category show-after-data-load">Histogram</h5>
+                <h2 class="card-title show-after-data-load">Complexity Score</h2>
               </div>
             </div>
           </div>
           <div class="card-body">
-              <div class="chart-area height-60vh">
-                  <canvas id="complexity_histogram" class="height-60vh"></canvas>
+              <div class="chart-area height-min-content">
+                  <canvas id="complexity_histogram"></canvas>
                   <!-- Spinner Overlay -->
                   <div id="spinner-overlay" class="spinner-overlay" style="display: none;">
                     <div class="lds-ripple"><div></div><div></div></div>
@@ -32,28 +83,56 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-6 col-md-12 d-flex">
-            <div class="card card-chart">
-              <div class="card-header ">
-                <div class="row">
-                  <div class="col-sm-6 text-left">
-                    <h5 class="card-category d-none show-after-data-load">Overall</h5>
-                    <h2 class="card-title d-none show-after-data-load">Tags Trend</h2>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body">
-                  <div class="chart-area">
-                    <canvas id="score_vs_complexity_scatter"></canvas>
-                    <!-- Spinner Overlay -->
-                    <div id="scatter-spinner-overlay" class="spinner-overlay" style="display: none;">
-                      <div class="lds-ripple"><div></div><div></div></div>
-                    </div>
-                </div>
+      <div class="col-12">
+        <div class="card card-chart">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-sm-6 text-left">
+                <h5 class="card-category show-after-data-load">Top 10 Tags Complexity Score </h5>
+                <h2 class="card-title show-after-data-load">Statistics</h2>
               </div>
             </div>
+          </div>
+          <div class="card-body">
+              <div class="chart-area height-min-content">
+                  <canvas id="tag_statistics"></canvas>
+                  <!-- Spinner Overlay -->
+                  <div id="tag_statistics_overlay" class="spinner-overlay" style="display: none;">
+                    <div class="lds-ripple"><div></div><div></div></div>
+                  </div>
+                </div>
+          </div>
         </div>
+      </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="complexityModal" tabindex="-1" role="dialog" aria-labelledby="complexityModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg model-margin-top" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title text-white" id="complexityModalLabel">Check Complexity</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Add your form here -->
+            <form>
+              <div class="form-group">
+                <label for="question-text" class="col-form-label">Question:</label>
+                <textarea class="form-control" id="question-text"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Check Complexity</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 
 {% endblock content %}
@@ -63,8 +142,33 @@
 
 <script>
     $(document).ready(function() {
+        CKEDITOR.replace( 'question-text' );
+
         $('#spinner-overlay').show();
         $('#scatter-spinner-overlay').show();
+        $('#complexity_quartile_over_time_overlay').show();
+        $('#tag_statistics_overlay').show();
+
+        $.getJSON('/api/complexity_quartile_over_time', function(data) {
+            let dates = data.dates;
+            let quartile_25 = data.quartile_25;
+            let quartile_50 = data.quartile_50;
+            let quartile_75 = data.quartile_75;
+
+            charts.initComplexityQuartileOverTime(dates, quartile_25, quartile_50, quartile_75);
+            $('#complexity_quartile_over_time_overlay').hide();
+
+        });
+
+        $.getJSON('/api/tag_statistics', function(data) {
+            let labels = data.map(item => item.tag);
+            let means = data.map(item => item.mean);
+            let medians = data.map(item => item.median);
+            let modes = data.map(item => item.mode);
+
+            charts.initComplexityStatisticsOfTags(labels, means, medians, modes);
+            $('#tag_statistics_overlay').hide();
+        });
 
         $.getJSON('/api/complexity_scores', function(data) {
             let labels = data.map(item => item.x);
@@ -80,6 +184,10 @@
         $.getJSON('/api/score_complexity', function(data) {
             charts.initScoreComplexityScatter(data);
             $('#scatter-spinner-overlay').hide();
+        });
+
+        $("#check_complexity").click(function(){
+            $("#complexityModal").modal('show');
         });
     });
 </script>

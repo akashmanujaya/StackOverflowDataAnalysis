@@ -1,17 +1,20 @@
-import os
 from dotenv import load_dotenv
 from mongoengine import connect
 from pymongo import UpdateOne
 from textblob import TextBlob
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
-import nltk
-import string
-import re
 from urllib.parse import quote_plus
 from textstat import flesch_kincaid_grade, polysyllabcount
 from apps.backend.database import Question
 from mongoengine.errors import OperationError
+from collections import Counter
+import json
+import numpy as np
+import os
+import nltk
+import string
+import re
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -20,13 +23,27 @@ load_dotenv()
 
 # Replace these with your MongoDB settings
 db_name = quote_plus(os.environ["MONGO_DB_NAME"])
-username = quote_plus(os.environ["MONGO_DB_USER"])
-password = quote_plus(os.environ["MONGO_DB_PASSWORD"])
+# username = quote_plus(os.environ["MONGO_DB_USER"])
+# password = quote_plus(os.environ["MONGO_DB_PASSWORD"])
 host = os.environ["MONGO_DB_HOST"]
+
+# This gives you the relative path from environment variable
+data_file_path = os.getenv('DATA_FILE_PATH')
 
 
 class ComplexityAnalyzer:
     stop_words = set(stopwords.words('english'))
+
+    def __int__(self):
+        # Establish the connection
+        # connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
+        connect(
+            db=db_name,  # Replace with your database name
+            host='localhost',  # Replace with your MongoDB server host
+            port=27017,  # Replace with your MongoDB server port
+            # username='your_username',  # Replace with your MongoDB username if required
+            # password='your_password',  # Replace with your MongoDB password if required
+        )
 
     @staticmethod
     def normalize(value: float, max_value: float) -> float:
@@ -102,9 +119,6 @@ class ComplexityAnalyzer:
     def update_question_complexity(self, batch_size=1000):
         """ Update the complexity of all questions in the database """
 
-        # Establish the connection
-        connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
-
         try:
             questions = Question.objects(complexity_score__exists=False).no_cache()  # disable cache
             question_count = questions.count()
@@ -130,3 +144,26 @@ class ComplexityAnalyzer:
     def calculate_complexity(self, text: str, tags_count: int = 0):
         """ Calculate and return the complexity score for the provided text and tags count """
         return self.text_complexity(text, tags_count)
+
+    def save_complexity_score(self):
+        scores = [item['complexity_score'] for item in Question.objects().only('complexity_score')]
+
+        # Set up the bins for the histogram
+        bins = np.linspace(0, 1, 11)  # create 10 equally spaced bins between 0 and 1
+        bins_labels = ["{:.1f} - {:.1f}".format(bins[i], bins[i + 1]) for i in
+                       range(len(bins) - 1)]  # Create bin labels
+
+        # Digitize the data (assign each score to a bin)
+        digitized = np.digitize(scores, bins)
+
+        # Count the number of scores in each bin
+        frequency_counts = Counter(digitized)
+
+        # Prepare the data for the chart
+        chart_data = [{'x': bins_labels[i - 1], 'y': frequency_counts[i]} for i in range(1, len(bins))]
+
+        # Ensure the directory exists
+        os.makedirs(data_file_path, exist_ok=True)
+
+        with open(f'{data_file_path}/complexity_score.json', 'w') as file:
+            file.write(json.dumps(chart_data))

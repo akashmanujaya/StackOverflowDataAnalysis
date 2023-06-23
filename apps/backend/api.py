@@ -1,103 +1,140 @@
 from flask import jsonify
 from apps.backend.database import User, Question, Tag
-import os
-from urllib.parse import quote_plus
 from dotenv import load_dotenv
-from collections import Counter
+import os
+import json
+from pandas import DataFrame
 import numpy as np
 
-# Load .env file
 load_dotenv()
 
-# Replace these with your MongoDB settings
-db_name = quote_plus(os.environ["MONGO_DB_NAME"])
-username = quote_plus(os.environ["MONGO_DB_USER"])
-password = quote_plus(os.environ["MONGO_DB_PASSWORD"])
-host = os.environ["MONGO_DB_HOST"]
+data_file_path = os.getenv('DATA_FILE_PATH')
+
+
+def get_complexity_quartile_over_time():
+    # Define the file path
+    file_path = os.path.join(data_file_path, 'complexity_quartile_over_time.json')
+
+    # Check if the file exists
+    if not os.path.isfile(file_path):
+        return jsonify({'error': 'File not found'}), 404
+
+    # Read the data from the file
+    with open(file_path, 'r') as file:
+        complexity_quartile_over_time = json.load(file)
+
+    # Return the data
+    return jsonify(complexity_quartile_over_time)
+
+
+def get_tag_statistics():
+    # Define the file path
+    file_path = os.path.join(data_file_path, 'tags_statistics.json')
+
+    # Check if the file exists
+    if not os.path.isfile(file_path):
+        return jsonify({'error': 'File not found'}), 404
+
+    # Read the data from the file
+    with open(file_path, 'r') as file:
+        tags_statistics = json.load(file)
+
+    # Return the data
+    return jsonify(tags_statistics)
 
 
 def get_top_users():
-    # Get top 7 users based on reputation
-    result = User.objects().order_by('-reputation')[:5]
-    return [serialize_user(user) for user in result]
+    # Define the file path
+    file_path = os.path.join(data_file_path, 'top_users.json')
 
+    # Check if the file exists
+    if not os.path.isfile(file_path):
+        return jsonify({'error': 'File not found'}), 404
 
-def serialize_user(user):
-    return {
-        'user_id': str(user.id),
-        'display_name': user.display_name,
-        'profile_image': user.profile_image,
-        'reputation': user.reputation,
-        'link': user.link
-    }
+    # Read the data from the file
+    with open(file_path, 'r') as file:
+        top_users = json.load(file)
+
+    # Return the data
+    return jsonify(top_users)
 
 
 def get_top_questions():
-    # Get top 7 questions based on score
-    result = Question.objects().order_by('-score')[:8]
-    return jsonify([
-        {
-            'question_id': str(question.id),
-            'title': question.title,
-            'view_count': question.view_count,
-            'user': serialize_user(question.user),
-            'score': question.score,
-            'link': question.link,
-        } for question in result
-    ])
+    # Define the file path
+    file_path = os.path.join(data_file_path, 'top_questions.json')
+
+    # Check if the file exists
+    if not os.path.isfile(file_path):
+        return jsonify({'error': 'File not found'}), 404
+
+    # Read the data from the file
+    with open(file_path, 'r') as file:
+        top_questions = json.load(file)
+
+    # Return the data
+    return jsonify(top_questions)
 
 
 def get_popular_tags():
     try:
-        # Get top 10 tags based on the number of questions associated with them
-        result = Tag.objects().order_by('-tags_length')[:10]
-        return jsonify([tag.tag_name for tag in result])
-    finally:
-        pass  # No need to close the session when using MongoEngine
+        # Define the file path
+        file_path = os.path.join(data_file_path, 'tags_and_data.json')
+
+        # Check if the file exists
+        if not os.path.isfile(file_path):
+            return jsonify({'error': 'File not found'}), 404
+
+        # Read the data from the file
+        with open(file_path, 'r') as file:
+            all_data = json.load(file)
+
+        # Return the tags
+        return jsonify(all_data['tags'])
+    except Exception as ex:
+        return jsonify({'error': f'Something went wrong: {ex}'}), 500
 
 
 def get_tag_data(tag_name):
-    # Get the tag with tag_name
-    tag = Tag.objects(tag_name=tag_name).first()
+    # Define the file path
+    file_path = os.path.join(data_file_path, 'tags_and_data.json')
 
-    # Check if tag exists
-    if not tag:
-        return jsonify([])
+    # Check if the file exists
+    if not os.path.isfile(file_path):
+        return jsonify({'error': 'File not found'}), 404
 
-    # Find all questions related to the tag
-    questions = Question.objects(tags=tag)
+    # Read the data from the file
+    with open(file_path, 'r') as file:
+        all_data = json.load(file)
 
-    # Prepare the data
-    data = {}
-    for question in questions:
-        year = question.creation_date.year
-        data[year] = data.get(year, 0) + 1
+    # Fetch the data for the requested tag
+    if tag_name not in all_data:
+        return jsonify({'error': 'No data for the given tag'}), 404
 
-    # Sort the data by year and convert to the required format
-    sorted_data = sorted(data.items(), key=lambda x: x[0])
-    return jsonify([(str(year), count) for year, count in sorted_data])
+    # Return the data
+    return jsonify(all_data[tag_name])
 
 
 def get_complexity_scores():
-    scores = [item['complexity_score'] for item in Question.objects().only('complexity_score')]
+    file_path = os.path.join(data_file_path, 'complexity_score.json')
+    # Check if the file exists
+    if not os.path.isfile(file_path):
+        return jsonify({'error': 'File not found'}), 404
 
-    # Set up the bins for the histogram
-    bins = np.linspace(0, 1, 11)  # create 10 equally spaced bins between 0 and 1
-    bins_labels = ["{:.1f} - {:.1f}".format(bins[i], bins[i + 1]) for i in range(len(bins) - 1)]  # Create bin labels
-
-    # Digitize the data (assign each score to a bin)
-    digitized = np.digitize(scores, bins)
-
-    # Count the number of scores in each bin
-    frequency_counts = Counter(digitized)
-
-    # Prepare the data for the chart
-    chart_data = [{'x': bins_labels[i - 1], 'y': frequency_counts[i]} for i in range(1, len(bins))]
+    # Read data from file
+    with open(file_path, 'r') as file:
+        chart_data = json.load(file)
 
     return jsonify(chart_data)
 
 
 def get_score_complexity():
-    data = Question.objects().only('score', 'complexity_score')
-    response = [{'x': item.complexity_score, 'y': item.score} for item in data]
-    return jsonify(response)
+    file_path = os.path.join(data_file_path, 'score_complexity.json')
+    # Check if the file exists
+    if not os.path.isfile(file_path):
+        return jsonify({'error': 'File not found'}), 404
+
+    # Read data from file
+    with open(file_path, 'r') as file:
+        chart_data = json.load(file)
+
+    return jsonify(chart_data)

@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-12">
         <div class="card card-chart">
-          <div class="card-header ">
+          <div class="card-header">
             <div class="row">
               <div class="col-sm-6 text-left">
                 <h5 class="card-category d-none show-after-data-load">Overall</h5>
@@ -158,10 +158,14 @@
         function fetchAndRenderData(tag) {
             let deferred = $.Deferred();
 
-            $.getJSON('/api/tags/' + tag, function(data) {
-                charts.initFirstOverallTrendChart(data.map(item => item[0]), data.map(item => item[1]));
-                deferred.resolve();
-            });
+            setTimeout(function(){
+                $.getJSON('/api/tags/' + tag, function(data) {
+                    charts.initFirstOverallTrendChart(data.map(item => item[0]), data.map(item => item[1]));
+                    deferred.resolve();
+                });
+            }, 500)
+
+
 
             return deferred.promise();
         }
@@ -176,7 +180,7 @@
                         <img src="${user.profile_image}" alt="Avatar" width="50" height="50">
                     </td>
                     <td>
-                        <a href="${user.link}" target="_blank">${user.display_name}</a>
+                        <a href="${user.link}" target="_blank" class="link_with_underline">${user.display_name}</a>
                     </td>
                     <td>
                         ${user.reputation.toLocaleString()}
@@ -193,13 +197,13 @@
             data.forEach(question => {
                 let questionRow = `<tr>
                     <td>
-                        <a href="${question.link}" target="_blank">${question.title.substring(0, 30)}...</a>
+                        <a href="${question.link}" target="_blank" class="link_with_underline">${question.title.substring(0, 30)}...</a>
                     </td>
                     <td>
                         ${question.view_count.toLocaleString()}
                     </td>
                     <td>
-                        <a href="${question.user.link}" target="_blank">${question.user.display_name}</a>
+                        <a href="${question.user.link}" target="_blank" class="link_with_underline">${question.user.display_name}</a>
                     </td>
                     <td>
                         ${question.score.toLocaleString()}

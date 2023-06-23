@@ -87,34 +87,34 @@ charts = {
   },
 
     initComplexityHistogram: function(labels, frequencies){
-    let ctx = document.getElementById("complexity_histogram").getContext('2d');
+        let ctx = document.getElementById("complexity_histogram").getContext('2d');
 
-    let config = {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: "Frequency",
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
-          data: frequencies,
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
+        let config = {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Frequency",
+              backgroundColor: 'rgba(192,110,75,0.2)',
+              borderColor: 'rgb(246,125,38)',
+              borderWidth: 1,
+              data: frequencies,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
             }
-          }]
-        }
-      }
-    };
+          }
+        };
 
-    new Chart(ctx, config);
-},
+        new Chart(ctx, config);
+    },
 
     initScoreComplexityScatter: function(data){
         let ctx = document.getElementById("score_vs_complexity_scatter").getContext('2d');
@@ -123,10 +123,10 @@ charts = {
         type: 'scatter',
         data: {
           datasets: [{
-            label: "Score vs Complexity",
+            label: "Complexity vs Score",
             data: data,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(192,116,75,0.2)',
+            borderColor: 'rgb(250,139,44)',
             borderWidth: 1
           }]
         },
@@ -145,7 +145,88 @@ charts = {
       };
 
         new Chart(ctx, config);
+    },
+
+    initComplexityQuartileOverTime: function(dates, firstQuartile, median, thirdQuartile) {
+        let ctx = document.getElementById("complexity_quartile_over_time").getContext('2d');
+        let config = {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'First Quartile',
+                    data: firstQuartile,
+                    fill: false,
+                    borderColor: 'rgb(192,85,75)',
+                }, {
+                    label: 'Median',
+                    data: median,
+                    fill: false,
+                    borderColor: 'rgb(250,139,44)',
+                }, {
+                    label: 'Third Quartile',
+                    data: thirdQuartile,
+                    fill: false,
+                    borderColor: 'rgb(252,187,92)',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Complexity'
+                        }
+                    }]
+                }
+            }
+        };
+
+        new Chart(ctx, config);
+    },
+
+    initComplexityStatisticsOfTags: function (labels, means, medians, modes){
+        let ctx = document.getElementById("tag_statistics").getContext('2d');
+        let config = {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Mean',
+                    data: means,
+                    backgroundColor: 'rgba(246,38,38,0.75)'
+                }, {
+                    label: 'Median',
+                    data: medians,
+                    backgroundColor: 'rgba(255,185,75,0.75)'
+                }, {
+                    label: 'Mode',
+                    data: modes,
+                    backgroundColor: 'rgba(246,125,38,0.75)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    xAxes: [{}],
+                    yAxes: [{}]
+                }
+            }
+        };
+
+        new Chart(ctx, config);
     }
+
 };
 
 
