@@ -107,27 +107,36 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="complexityModal" tabindex="-1" role="dialog" aria-labelledby="complexityModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg model-margin-top" role="document">
+   <div class="modal fade" id="complexityModal" tabindex="-1" role="dialog" aria-labelledby="complexityModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg model-margin-top height-60vh" role="document">
+          <!-- Spinner Overlay -->
+      <div id="check_complexity_overlay" class="spinner-overlay" style="display: none;">
+        <div class="lds-ripple"><div></div><div></div></div>
+      </div>
         <div class="modal-content">
           <div class="modal-header">
-            <h3 class="modal-title text-white" id="complexityModalLabel">Check Complexity</h3>
+            <h4 class="modal-title font-white text-capitalize font-weight-600" id="complexityModalLabel">Question Complexity Checker</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <!-- Add your form here -->
-            <form>
+            <!-- Form -->
+            <form id="complexity-form">
               <div class="form-group">
-                <label for="question-text" class="col-form-label">Question:</label>
-                <textarea class="form-control" id="question-text"></textarea>
+                <label for="question-text" class="col-form-label font-white">Enter your question:</label>
+                <textarea class="form-control" name="question" id="question"></textarea>
               </div>
+              <button type="submit" class="btn btn-primary">Check Complexity</button>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Check Complexity</button>
+
+
+
+            <!-- Score Result -->
+            <div id="score-result" style="display: none;">
+              <canvas id="complexity-chart"></canvas>
+              <button id="check-another" class="btn btn-fill btn-primary">Check another question</button>
+            </div>
           </div>
         </div>
       </div>
@@ -142,12 +151,13 @@
 
 <script>
     $(document).ready(function() {
-        CKEDITOR.replace( 'question-text' );
+        CKEDITOR.replace('question');
 
         $('#spinner-overlay').show();
         $('#scatter-spinner-overlay').show();
         $('#complexity_quartile_over_time_overlay').show();
         $('#tag_statistics_overlay').show();
+
 
         $.getJSON('/api/complexity_quartile_over_time', function(data) {
             let dates = data.dates;
@@ -189,7 +199,76 @@
         $("#check_complexity").click(function(){
             $("#complexityModal").modal('show');
         });
+
+        $('#complexity-form').on('submit', function(e) {
+            e.preventDefault();
+
+            // update textarea with CKEditor content
+            let editorContent = CKEDITOR.instances.question.getData();
+            $('#question').val(editorContent)
+
+            if ( editorContent === '') {
+                // Show SweetAlert and stop the Ajax request
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Question text cannot be empty!',
+                });
+                return;
+            }
+
+            $('#check_complexity_overlay').show();
+
+            // Show the loader and hide the form
+            $('#loader').show();
+            $('#complexity-form').hide();
+
+            // Send AJAX request
+            $.ajax({
+              type: 'POST',
+              url: '/api/calculate_complexity_score',
+              data: $(this).serialize(),
+              success: function(data) {
+                  setTimeout(function (){
+                      $('#complexity-form').hide();
+                      $('#score-result').show();
+                      $('#check_complexity_overlay').hide();
+                      charts.initComplexityDonut(data.score)
+                  }, 1000)
+              },
+
+              error: function() {
+                $('#loader').hide();
+                $('#complexity-form').show();
+                alert('Error calculating complexity score.');
+              }
+            });
+        });
+
+          // Handle click on "Check another question" button
+        $('#check-another').on('click', function() {
+            // Show the form and hide the result
+            $('#complexity-form').show();
+            $('#score-result').hide();
+        });
+
+        // Event listener for when the modal is hidden
+        $('#complexityModal').on('hidden.bs.modal', function (e) {
+          // Reset the form
+          CKEDITOR.instances.question.setData('');
+
+          // Hide the donut chart
+          $('#score-result').hide();
+
+          // Show the form
+          $('#complexity-form').show();
+
+          // Hide the score
+          $('#complexityScoreContainer').hide();
+        });
+
     });
+
 </script>
 
 

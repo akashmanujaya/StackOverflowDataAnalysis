@@ -1,10 +1,8 @@
 from flask import jsonify
-from apps.backend.database import User, Question, Tag
+from apps.backend.services.complexity_score import ComplexityAnalyzer
 from dotenv import load_dotenv
 import os
 import json
-from pandas import DataFrame
-import numpy as np
 
 load_dotenv()
 
@@ -138,3 +136,9 @@ def get_score_complexity():
         chart_data = json.load(file)
 
     return jsonify(chart_data)
+
+
+def get_calculated_com_score(text):
+    com_analyser = ComplexityAnalyzer()
+    score = com_analyser.calculate_complexity(text)
+    return score

@@ -141,10 +141,6 @@ class ComplexityAnalyzer:
         except Exception as e:
             print(f"An error occurred while updating question complexity: {e}")
 
-    def calculate_complexity(self, text: str, tags_count: int = 0):
-        """ Calculate and return the complexity score for the provided text and tags count """
-        return self.text_complexity(text, tags_count)
-
     def save_complexity_score(self):
         scores = [item['complexity_score'] for item in Question.objects().only('complexity_score')]
 
@@ -167,3 +163,7 @@ class ComplexityAnalyzer:
 
         with open(f'{data_file_path}/complexity_score.json', 'w') as file:
             file.write(json.dumps(chart_data))
+
+    def calculate_complexity(self, text: str, tags_count: int = 0):
+        """ Calculate and return the complexity score for the provided text and tags count """
+        return self.text_complexity(text, tags_count)

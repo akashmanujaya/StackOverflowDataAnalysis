@@ -225,8 +225,53 @@ charts = {
         };
 
         new Chart(ctx, config);
+    },
+
+    initComplexityDonut: function(score){
+        let ctx = document.getElementById("complexity-chart").getContext('2d');
+
+        let config = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [score, 1 - score],
+                    backgroundColor: [getGradientColor(score), 'rgba(0, 0, 0, 0.1)'],
+                    borderColor: [getGradientColor(score), 'rgba(0, 0, 0, 0.1)'],
+                    borderWidth: 1
+                }],
+                labels: [
+                    'Complexity Score',
+                    'Remaining'
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    display: true
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true,
+                    easing: 'linear',
+                    duration: 500
+                },
+                cutoutPercentage: 70,
+                tooltips: {
+                    enabled: false
+                }
+            }
+        };
+
+        new Chart(ctx, config);
     }
 
 };
+
+function getGradientColor(score) {
+    let r = score * 255;
+    let g = (1 - score) * 255;
+    let b = 0;
+    return 'rgb(' + Math.round(r) + ',' + Math.round(g) + ',' + b + ')';
+}
 
 

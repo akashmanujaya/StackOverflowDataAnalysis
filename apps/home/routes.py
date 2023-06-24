@@ -39,6 +39,13 @@ def complexity_quartile_over_time():
     return get_complexity_quartile_over_time()
 
 
+@blueprint.route('/api/calculate_complexity_score', methods=['POST'])
+def calculate_complexity_score():
+    data = request.form['question']
+    score = get_calculated_com_score(data)
+    return jsonify({'score': score})
+
+
 @blueprint.route('/api/tag_statistics')
 def tag_statistics():
     return get_tag_statistics()
