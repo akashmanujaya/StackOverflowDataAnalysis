@@ -138,7 +138,7 @@ def get_score_complexity():
     return jsonify(chart_data)
 
 
-def get_calculated_com_score(text):
+def get_calculated_com_score(text, tag_count=0):
     com_analyser = ComplexityAnalyzer()
-    score = com_analyser.calculate_complexity(text)
+    score = com_analyser.calculate_complexity(text, tag_count)
     return score

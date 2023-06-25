@@ -1,6 +1,6 @@
 from apps.home import blueprint
-from flask import render_template, request
-from jinja2 import TemplateNotFound
+from flask import render_template, request, jsonify
+import json
 from apps.backend.api import *
 
 
@@ -41,8 +41,16 @@ def complexity_quartile_over_time():
 
 @blueprint.route('/api/calculate_complexity_score', methods=['POST'])
 def calculate_complexity_score():
-    data = request.form['question']
-    score = get_calculated_com_score(data)
+    question = request.form['question']
+    tags_count = 0
+
+    if request.form['tags']:
+        # Parse the tags data from the AJAX request payload
+        tags = json.loads(request.form['tags'])
+
+        # Calculate the number of tags
+        tags_count = len(tags)
+    score = get_calculated_com_score(question, tags_count)
     return jsonify({'score': score})
 
 

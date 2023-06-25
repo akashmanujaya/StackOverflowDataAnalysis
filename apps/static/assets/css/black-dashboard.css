@@ -13421,6 +13421,10 @@ Copyright (c) 2015 Daniel Eden
   height: 60vh !important;
 }
 
+.height-70vh{
+  height: 70vh !important;
+}
+
 .height-min-content{
   height: min-content !important;
 }
@@ -13445,4 +13449,20 @@ Copyright (c) 2015 Daniel Eden
 
 .font-white{
   color: #FFFFFF !important;
+}
+
+.score-result{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#complexity-chart{
+  height: auto !important;
+  width: 80% !important;
+}
+
+.form-control {
+    height: auto !important;
 }

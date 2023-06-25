@@ -36,10 +36,9 @@ class CrossValidatedClient:
                 data = self.fetch_questions(page, tag)
                 print(f"page is: {page} and tag is: {tag}")
                 if 'items' in data:
-                    print(f"Length of data set is: {len(data['items'])}")
                     yield data['items']
                     if not data['has_more']:
-                        print(f'Stopping at page {page} because no more data is available')  # Log stopping condition
+                        print(f'Stopping at page {page} for {tag} because no more data is available')
                         break
                 # Check remaining quota and pause if it's low
                 if 'quota_remaining' in data and data['quota_remaining'] < 10:

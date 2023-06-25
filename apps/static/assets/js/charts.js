@@ -247,7 +247,7 @@ charts = {
             options: {
                 responsive: true,
                 legend: {
-                    display: true
+                    display: false
                 },
                 animation: {
                     animateScale: true,
@@ -259,7 +259,26 @@ charts = {
                 tooltips: {
                     enabled: false
                 }
-            }
+            },
+            plugins: [{
+                afterDraw: function(chart) {
+                    let width = chart.chart.width,
+                        height = chart.chart.height,
+                        ctx = chart.chart.ctx;
+
+                    ctx.restore();
+                    let fontSize = (height / 114).toFixed(2);
+                    ctx.font = "bold " + fontSize + "em sans-serif";
+                    ctx.textBaseline = "middle";
+                    ctx.fillStyle = 'white';
+
+                    let text = (score * 100).toFixed(2) + "%",
+                        textX = Math.round((width - ctx.measureText(text).width) / 2),
+                        textY = height / 2;
+
+                    ctx.fillText(text, textX, textY);
+                }
+            }]
         };
 
         new Chart(ctx, config);

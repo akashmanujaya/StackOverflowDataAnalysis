@@ -126,12 +126,9 @@ def save_tags_and_data():
 
         # Prepare the data
         data = {}
-        count = 0
         for question in questions:
             year = question.creation_date.year
             data[year] = data.get(year, 0) + 1
-            count += 1
-            print(f"Tag is  {tag_name} and count is {count}")
 
         # Sort the data by year and convert to the required format
         sorted_data = sorted(data.items(), key=lambda x: x[0])
@@ -163,7 +160,7 @@ def save_tag_statistics():
         scores = [question.complexity_score for question in questions]
         mean = np.mean(scores)
         median = np.median(scores)
-        mode = stats.mode(scores)[0][0] if scores else np.nan # Take only the first mode
+        mode = stats.mode(scores)[0][0] if scores else np.nan  # Take only the first mode
 
         # Append a new dictionary to tag_data
         tag_data.append({
@@ -180,6 +177,7 @@ def save_tag_statistics():
     # Write the serialized data to the file
     with open(file_path, 'w') as file:
         file.write(json.dumps(tag_data))
+
 
 @celery_app.task(name="apps.backend.services.tasks.save_score_complexity")
 def save_score_complexity():
@@ -202,6 +200,9 @@ def save_complexity_quartile_over_time():
     # Create a DataFrame with creation_date and complexity_score
     df = DataFrame([{'date': question.creation_date, 'complexity': question.complexity_score}
                     for question in questions])
+
+    # Drop rows where 'complexity' is NaN
+    df = df.dropna(subset=['complexity'])
 
     # Convert creation_date to year format
     df['date'] = df['date'].apply(lambda x: x.strftime('%Y'))
@@ -276,126 +277,88 @@ def serialize_user(user):
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
     # Initialize a DatabaseManager instance with your database credentials
-    # db_manager = DatabaseManager()
-    #
-    # # Initialize a StackOverflowClient instance with the tags you're interested in
-    # stack_overflow_tags = ['python', 'data-science', 'machine-learning', 'deep-learning', 'neural-network',
-    #                        'classification',
-    #                        'keras', 'nlp', 'scikit-learn', 'tensorflow', 'time-series', 'regression', 'r',
-    #                        'dataset',
-    #                        'cnn', 'clustering', 'pandas', 'data-mining', 'predictive-modeling', 'lstm',
-    #                        'statistics',
-    #                        'feature-selection', 'data', 'random-forest', 'machine-learning-model',
-    #                        'linear-regression',
-    #                        'data-cleaning', 'rnn', 'image-classification', 'convolutional-neural-network',
-    #                        'decision-trees',
-    #                        'xgboost', 'logistic-regression', 'visualization', 'training', 'pytorch',
-    #                        'data-science-model',
-    #                        'feature-engineering', 'computer-vision', 'cross-validation', 'reinforcement-learning',
-    #                        'svm',
-    #                        'text-mining', 'multiclass-classification', 'class-imbalance', 'loss-function',
-    #                        'preprocessing',
-    #                        'optimization', 'recommender-system', 'word-embeddings', 'bigdata']
-    #
-    # cross_validated_tags = [
-    #     'r',
-    #     'regression',
-    #     'machine-learning',
-    #     'time-series',
-    #     'probability',
-    #     'hypothesis-testing',
-    #     'distributions',
-    #     'self-study',
-    #     'neural-networks',
-    #     'bayesian',
-    #     'logistic',
-    #     'mathematical-statistics',
-    #     'classification',
-    #     'correlation',
-    #     'statistical-significance',
-    #     'mixed-model',
-    #     'normal-distribution',
-    #     'multiple-regression',
-    #     'python',
-    #     'confidence-interval',
-    #     'generalized-linear-model',
-    #     'variance',
-    #     'clustering',
-    #     'forecasting',
-    #     'clustering',
-    #     'data-visualization',
-    #     'cross-validation',
-    #     'sampling',
-    #     'p-value',
-    #     'linear-model'
-    # ]
-    #
-    # stackoverflow_client = StackOverflowClient(
-    #     stack_overflow_tags,
-    #     os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
-    #     os.environ['STACK_EXCHANGE_KEY']
-    # )
-    #
-    # cross_validated_client = CrossValidatedClient(
-    #     cross_validated_tags,
-    #     os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
-    #     os.environ['STACK_EXCHANGE_KEY']
-    # )
-    #
-    # for items in stackoverflow_client.fetch_all_questions():
-    #     for question in items:
-    #         try:
-    #             if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
-    #                 user = db_manager.insert_user(question['owner'])
-    #                 question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
-    #                     '%Y-%m-%d %H:%M:%S')
-    #                 if 'last_edit_date' in question:
-    #                     question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
-    #                         '%Y-%m-%d %H:%M:%S')
-    #                 question['user'] = user
-    #                 question['source'] = 'stackoverflow'
-    #                 tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
-    #                 db_manager.insert_question(question, tags)
-    #         except Exception as ex:
-    #             print(f"Error Occurred: {ex}")
-    #
-    # for items in cross_validated_client.fetch_all_questions():
-    #     for question in items:
-    #         try:
-    #             if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
-    #                 user = db_manager.insert_user(question['owner'])
-    #                 question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
-    #                     '%Y-%m-%d %H:%M:%S')
-    #                 if 'last_edit_date' in question:
-    #                     question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
-    #                         '%Y-%m-%d %H:%M:%S')
-    #                 question['user'] = user
-    #                 question['source'] = 'crossvalidated'
-    #                 tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
-    #                 db_manager.insert_question(question, tags)
-    #         except Exception as ex:
-    #             print(f"Error Occurred: {ex}")
+    db_manager = DatabaseManager()
+
+    # Get the directory of the current script file
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+
+    # Construct the full paths to your files
+    stackoverflow_tags_path = os.path.join(current_dir, 'stackoverflow_tags.txt')
+    cross_validated_tags_path = os.path.join(current_dir, 'cross_validated_tags.txt')
+
+    # Read tags from text files
+    with open(stackoverflow_tags_path, 'r') as file:
+        stack_overflow_tags = [line.strip() for line in file.readlines()]
+
+    with open(cross_validated_tags_path, 'r') as file:
+        cross_validated_tags = [line.strip() for line in file.readlines()]
+
+    stackoverflow_client = StackOverflowClient(
+        stack_overflow_tags,
+        os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
+        os.environ['STACK_EXCHANGE_KEY']
+    )
+
+    cross_validated_client = CrossValidatedClient(
+        cross_validated_tags,
+        os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
+        os.environ['STACK_EXCHANGE_KEY']
+    )
+
+    for items in stackoverflow_client.fetch_all_questions():
+        for question in items:
+            try:
+                if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
+                    user = db_manager.insert_user(question['owner'])
+                    question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
+                        '%Y-%m-%d %H:%M:%S')
+                    if 'last_edit_date' in question:
+                        question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
+                            '%Y-%m-%d %H:%M:%S')
+                    question['user'] = user
+                    question['source'] = 'stackoverflow'
+                    tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
+                    db_manager.insert_question(question, tags)
+            except Exception as ex:
+                print(f"Error Occurred: {ex}")
+
+    for items in cross_validated_client.fetch_all_questions():
+        for question in items:
+            try:
+                if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
+                    user = db_manager.insert_user(question['owner'])
+                    question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
+                        '%Y-%m-%d %H:%M:%S')
+                    if 'last_edit_date' in question:
+                        question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
+                            '%Y-%m-%d %H:%M:%S')
+                    question['user'] = user
+                    question['source'] = 'crossvalidated'
+                    tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
+                    db_manager.insert_question(question, tags)
+            except Exception as ex:
+                print(f"Error Occurred: {ex}")
 
     # Invoke save_popular_tags when fetch_data finishes
-    # save_tags_and_data.delay()
+    save_tags_and_data.delay()
 
     # Invoke save_score_complexity when fetch_data finishes
-    # save_score_complexity.delay()
+    save_score_complexity.delay()
 
     # Invoke save_complexity_quartile_over_time when fetch_data finishes
-    # save_complexity_quartile_over_time.delay()
+    save_complexity_quartile_over_time.delay()
 
-    # Invoke save_complexity_quartile_over_time when fetch_data finishes
+    # Invoke save_tag_statistics when fetch_data finishes
     save_tag_statistics.delay()
 
-    # # Invoke save_top_users when fetch_data finishes
-    # save_top_users.delay()
-    #
-    # # Invoke save_top_questions when fetch_data finishes
-    # save_top_questions.delay()
-    #
-    # # Invoke update_tags_length when fetch_data finishes
-    # update_tags_length.delay()
-    #
-    # # Invoke update_complexity_score when update_tags_length finishes
-    # update_complexity_score.delay()
+    # Invoke save_top_users when fetch_data finishes
+    save_top_users.delay()
+
+    # Invoke save_top_questions when fetch_data finishes
+    save_top_questions.delay()
+
+    # Invoke update_tags_length when fetch_data finishes
+    update_tags_length.delay()
+
+    # Invoke update_complexity_score when update_tags_length finishes
+    update_complexity_score.delay()
