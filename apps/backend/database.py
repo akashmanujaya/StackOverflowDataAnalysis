@@ -34,6 +34,9 @@ class Question(db.Document):
     user = db.ReferenceField(User)
     tags = db.ListField(db.ReferenceField(Tag))
     complexity_score = db.FloatField()
+    question_length = db.IntField()
+    question_age = db.FloatField()
+    time_since_last_edit = db.FloatField()
 
     meta = {
         'indexes': ['tags']

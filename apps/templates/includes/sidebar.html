@@ -14,20 +14,24 @@
         </div>
 
         <ul class="nav">
-          <li class="{% if 'index' in segment %} active {% endif %}">
-            <a href="/">
-              <i class="tim-icons icon-chart-pie-36"></i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li class="{% if 'complexity' in segment %} active {% endif %}">
-            <a href="/complexity">
-              <i class="tim-icons icon-atom"></i>
-              <p>Complexity</p>
-            </a>
-          </li>
-
+            <li class="{% if 'index' in segment %} active {% endif %}">
+                <a href="/">
+                <i class="tim-icons icon-chart-pie-36"></i>
+                <p>Dashboard</p>
+             </a>
+            </li>
+            <li class="{% if 'complexity' in segment %} active {% endif %}">
+                <a href="/complexity">
+                  <i class="tim-icons icon-atom"></i>
+                  <p>Complexity</p>
+                </a>
+            </li>
+            <li class="{% if 'predictions' in segment %} active {% endif %}">
+                <a href="/predictions">
+                  <i class="tim-icons icon-chart-bar-32"></i>
+                  <p>Predictions</p>
+                </a>
+            </li>
         </ul>
-        
       </div>
     </div>

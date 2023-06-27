@@ -13,3 +13,6 @@ textstat~=0.7.3
 pymongo~=4.3.3
 numpy~=1.25.0
 scipy~=1.10.1
+scikit-learn~=1.2.2
+joblib~=1.2.0
+statsmodels~=0.14.0

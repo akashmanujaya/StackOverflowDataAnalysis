@@ -274,6 +274,20 @@ def serialize_user(user):
     }
 
 
+def calculate_question_age(creation_date):
+    now = datetime.utcnow()  # this will now create a timezone naive datetime object
+    age = (now - creation_date).total_seconds() / (60 * 60 * 24)  # convert to days
+    return age
+
+def calculate_time_since_last_edit(last_edit_date):
+    if last_edit_date:  # if the question has been edited
+        now = datetime.utcnow()
+        time_since_last_edit = (now - last_edit_date).total_seconds() / (60 * 60 * 24)  # convert to days
+    else:  # if the question has not been edited
+        time_since_last_edit = None
+    return time_since_last_edit
+
+
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
     # Initialize a DatabaseManager instance with your database credentials
@@ -317,6 +331,9 @@ def fetch_data():
                             '%Y-%m-%d %H:%M:%S')
                     question['user'] = user
                     question['source'] = 'stackoverflow'
+                    question['question_length'] = len(question['body'])
+                    question['question_age'] = calculate_question_age(question['creation_date'])
+                    question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
                     tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
                     db_manager.insert_question(question, tags)
             except Exception as ex:
@@ -334,6 +351,9 @@ def fetch_data():
                             '%Y-%m-%d %H:%M:%S')
                     question['user'] = user
                     question['source'] = 'crossvalidated'
+                    question['question_length'] = len(question['body'])
+                    question['question_age'] = calculate_question_age(question['creation_date'])
+                    question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
                     tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
                     db_manager.insert_question(question, tags)
             except Exception as ex:

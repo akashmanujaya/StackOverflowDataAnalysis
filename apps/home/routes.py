@@ -14,6 +14,11 @@ def complexity_score():
     return render_template('home/complexity.html', segment='complexity')
 
 
+@blueprint.route('/predictions')
+def predictions():
+    return render_template('home/predictions.html', segment='predictions')
+
+
 @blueprint.route('/api/complexity_scores')
 def get_complexity_hist():
     return get_complexity_scores()
@@ -69,23 +74,9 @@ def top_questions():
     return get_top_questions()
 
 
-# @blueprint.route('/<template>')
-# def route_template(template):
-#     try:
-#         if not template.endswith('.html'):
-#             pass
-#
-#         # Detect the current page
-#         segment = get_segment(request)
-#
-#         # Serve the file (if exists) from app/templates/home/FILE.html
-#         return render_template("home/" + template, segment=segment)
-#
-#     except TemplateNotFound:
-#         return render_template('home/page-404.html'), 404
-#
-#     except:
-#         return render_template('home/page-500.html'), 500
+@blueprint.route('/api/tag_prediction/<tag_name>')
+def tag_prediction(tag_name):
+    return get_prediction(tag_name)
 
 
 # Helper - Extract current page name from request

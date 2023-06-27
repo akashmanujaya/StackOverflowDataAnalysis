@@ -45,7 +45,10 @@ class DatabaseManager:
                 last_edit_date=question.get('last_edit_date'),
                 source=question['source'],
                 user=question['user'],
-                tags=tags
+                tags=tags,
+                question_length=question['question_length'],
+                question_age=question['question_age'],
+                time_since_last_edit=question['time_since_last_edit']
             )
         else:
             # Insert new question
@@ -62,7 +65,8 @@ class DatabaseManager:
                 last_edit_date=question.get('last_edit_date'),
                 source=question['source'],
                 user=question['user'],
-                tags=tags
+                tags=tags,
+                question_length=question['question_length']
             )
             question_instance.save()
         return question_instance  # Return the question instance

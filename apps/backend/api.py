@@ -1,3 +1,5 @@
+import pickle
+import pandas as pd
 from flask import jsonify
 from apps.backend.services.complexity_score import ComplexityAnalyzer
 from dotenv import load_dotenv
@@ -7,7 +9,31 @@ import json
 load_dotenv()
 
 data_file_path = os.getenv('DATA_FILE_PATH')
+prediction_file_path = os.getenv('PREDICTIONS_FILE_PATH')
 
+
+def get_prediction(tag_name):
+    try:
+        # Define the file path
+        file_path = os.path.join(prediction_file_path, f'tag_question_count_prediction/{tag_name}_prediction_model.pkl')
+
+        # Load the model
+        with open(file_path, 'rb') as file:
+            model = pickle.load(file)
+
+        # Generate the years for next 5 years
+        years = pd.date_range(start='2023', end='2028', freq='AS')
+
+        # Predict for next 5 years
+        prediction = model.predict(start=1, end=5)
+
+        # Prepare the result
+        result = dict(zip(map(str, years.year), prediction.tolist()))
+
+        # Return the result
+        return jsonify(result)
+    except Exception as e:
+        return str(e)
 
 def get_complexity_quartile_over_time():
     # Define the file path

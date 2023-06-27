@@ -1,0 +1,107 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Prediction {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-chart">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-sm-6 text-left">
+                <h5 class="card-category d-none show-after-data-load">Prediction</h5>
+                <h2 class="card-title d-none show-after-data-load">Tags Trend Prediction</h2>
+              </div>
+              <div class="col-sm-6 d-none show-after-data-load">
+                <select class="form-control" id="tag-selector">
+                  <!-- tag options will be populated here -->
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas id="prediction_trends"></canvas>
+              <!-- Spinner Overlay -->
+              <div id="spinner-overlay" class="spinner-overlay" style="display: none;">
+                <div class="lds-ripple"><div></div><div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('#spinner-overlay').show();
+
+            $.getJSON('/api/tags', function(data) {
+              let firstTag;
+
+              data.forEach((tag_info, index) => {
+                  let option = $('<option>').val(tag_info).text(tag_info);
+                  $('#tag-selector').append(option);
+
+                  if(index === 0) {
+                      firstTag = tag_info;
+                  }
+              });
+
+              if(firstTag) {
+                $('#spinner-overlay').show();
+                fetchAndRenderData(firstTag).then(function() {
+                    $('#spinner-overlay').hide();
+                    $('.show-after-data-load').removeClass('d-none');
+                });
+              }
+            });
+
+            $('#tag-selector').change(function() {
+              $('#spinner-overlay').show();
+              let selectedTag = $(this).val();
+              if (selectedTag === 'All') {
+                  // Fetch and render trends for all tags
+                  $.getJSON('/api/tags', function(data) {
+                      let fetchPromises = data.map(fetchAndRenderData);
+                      $.when(...fetchPromises).then(function() {
+                          $('#spinner-overlay').hide();
+                      });
+                  });
+              } else {
+                  // Fetch and render trend for the selected tag
+                  fetchAndRenderData(selectedTag).then(function() {
+                      $('#spinner-overlay').hide();
+                  });
+              }
+
+            });
+
+            function fetchAndRenderData(tag) {
+                let deferred = $.Deferred();
+
+                setTimeout(function(){
+                    $.getJSON('/api/tag_prediction/' + tag, function(data) {
+                        let years = Object.keys(data);
+                        let values = Object.values(data);
+                        // Initialize the chart with the data
+                        // You need to define initPredictionTrendChart() in your chart helper
+                        charts.initPredictionTrendChart(years, values);
+                        deferred.resolve();
+                    });
+                }, 500)
+
+                return deferred.promise();
+            }
+        });
+
+    </script>
+{% endblock javascripts %}
