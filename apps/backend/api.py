@@ -35,6 +35,7 @@ def get_prediction(tag_name):
     except Exception as e:
         return str(e)
 
+
 def get_complexity_quartile_over_time():
     # Define the file path
     file_path = os.path.join(data_file_path, 'complexity_quartile_over_time.json')
