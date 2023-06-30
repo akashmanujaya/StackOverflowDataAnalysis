@@ -4,31 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4687a5e9-c649-4471-a057-522cde98b6da" name="Changes" comment="small modifications">
-      <change afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/templates/home/ngram_viewer.html" afterDir="false" />
+    <list default="true" id="4687a5e9-c649-4471-a057-522cde98b6da" name="Changes" comment="Ngram Added with multi-line chart">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/clients/crossvalidated_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/clients/crossvalidated_client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/clients/stackoverflow_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/clients/stackoverflow_client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/database_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/database_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/predictions/question_score_prediction.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/predictions/question_score_prediction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/predictions/tag_question_count_prediction.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/predictions/tag_question_count_prediction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/services/complexity_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/complexity_score.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/services/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/home/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/home/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/static/assets/css/black-dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/css/black-dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/static/assets/js/charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/js/charts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/home/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/includes/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/includes/sidebar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

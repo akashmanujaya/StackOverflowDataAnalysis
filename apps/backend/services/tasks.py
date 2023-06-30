@@ -355,104 +355,104 @@ def calculate_time_since_last_edit(last_edit_date):
 
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
-    # # Initialize a DatabaseManager instance with your database credentials
-    # db_manager = DatabaseManager()
-    #
-    # # Read tags from text files
-    # with open(stackoverflow_tags_path, 'r') as file:
-    #     stack_overflow_tags = [line.strip() for line in file.readlines()]
-    #
-    # with open(cross_validated_tags_path, 'r') as file:
-    #     cross_validated_tags = [line.strip() for line in file.readlines()]
-    #
-    # stackoverflow_client = StackOverflowClient(
-    #     stack_overflow_tags,
-    #     os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
-    #     os.environ['STACK_EXCHANGE_KEY']
-    # )
-    #
-    # cross_validated_client = CrossValidatedClient(
-    #     cross_validated_tags,
-    #     os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
-    #     os.environ['STACK_EXCHANGE_KEY']
-    # )
-    #
-    # for items in stackoverflow_client.fetch_all_questions():
-    #     for question in items:
-    #         try:
-    #             if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
-    #                 user = db_manager.insert_user(question['owner'])
-    #                 question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
-    #                     '%Y-%m-%d %H:%M:%S')
-    #                 if 'last_edit_date' in question:
-    #                     question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
-    #                         '%Y-%m-%d %H:%M:%S')
-    #                     question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
-    #
-    #                 else:
-    #                     question['last_edit_date'] = None
-    #                     question['time_since_last_edit'] = None
-    #
-    #                 question['user'] = user
-    #                 question['source'] = 'stackoverflow'
-    #                 question['question_length'] = len(question['body'])
-    #                 question['question_age'] = calculate_question_age(question['creation_date'])
-    #
-    #                 tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
-    #                 db_manager.insert_question(question, tags)
-    #         except Exception as ex:
-    #             print(f"Error Occurred from fetch_data function stackoverflow_client: {ex}")
-    #             break
-    #
-    # for items in cross_validated_client.fetch_all_questions():
-    #     for question in items:
-    #         try:
-    #             if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
-    #                 user = db_manager.insert_user(question['owner'])
-    #                 question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
-    #                     '%Y-%m-%d %H:%M:%S')
-    #                 if 'last_edit_date' in question:
-    #                     question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
-    #                         '%Y-%m-%d %H:%M:%S')
-    #                     question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
-    #                 else:
-    #                     question['last_edit_date'] = None
-    #                     question['time_since_last_edit'] = None
-    #
-    #                 question['user'] = user
-    #                 question['source'] = 'crossvalidated'
-    #                 question['question_length'] = len(question['body'])
-    #                 question['question_age'] = calculate_question_age(question['creation_date'])
-    #
-    #                 tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
-    #                 db_manager.insert_question(question, tags)
-    #         except Exception as ex:
-    #             print(f"Error Occurred from fetch_data function cross_validated_client: {ex}")
-    #             break
+    # Initialize a DatabaseManager instance with your database credentials
+    db_manager = DatabaseManager()
+
+    # Read tags from text files
+    with open(stackoverflow_tags_path, 'r') as file:
+        stack_overflow_tags = [line.strip() for line in file.readlines()]
+
+    with open(cross_validated_tags_path, 'r') as file:
+        cross_validated_tags = [line.strip() for line in file.readlines()]
+
+    stackoverflow_client = StackOverflowClient(
+        stack_overflow_tags,
+        os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
+        os.environ['STACK_EXCHANGE_KEY']
+    )
+
+    cross_validated_client = CrossValidatedClient(
+        cross_validated_tags,
+        os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
+        os.environ['STACK_EXCHANGE_KEY']
+    )
+
+    for items in stackoverflow_client.fetch_all_questions():
+        for question in items:
+            try:
+                if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
+                    user = db_manager.insert_user(question['owner'])
+                    question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
+                        '%Y-%m-%d %H:%M:%S')
+                    if 'last_edit_date' in question:
+                        question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
+                            '%Y-%m-%d %H:%M:%S')
+                        question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
+
+                    else:
+                        question['last_edit_date'] = None
+                        question['time_since_last_edit'] = None
+
+                    question['user'] = user
+                    question['source'] = 'stackoverflow'
+                    question['question_length'] = len(question['body'])
+                    question['question_age'] = calculate_question_age(question['creation_date'])
+
+                    tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
+                    db_manager.insert_question(question, tags)
+            except Exception as ex:
+                print(f"Error Occurred from fetch_data function stackoverflow_client: {ex}")
+                break
+
+    for items in cross_validated_client.fetch_all_questions():
+        for question in items:
+            try:
+                if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
+                    user = db_manager.insert_user(question['owner'])
+                    question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
+                        '%Y-%m-%d %H:%M:%S')
+                    if 'last_edit_date' in question:
+                        question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
+                            '%Y-%m-%d %H:%M:%S')
+                        question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
+                    else:
+                        question['last_edit_date'] = None
+                        question['time_since_last_edit'] = None
+
+                    question['user'] = user
+                    question['source'] = 'crossvalidated'
+                    question['question_length'] = len(question['body'])
+                    question['question_age'] = calculate_question_age(question['creation_date'])
+
+                    tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
+                    db_manager.insert_question(question, tags)
+            except Exception as ex:
+                print(f"Error Occurred from fetch_data function cross_validated_client: {ex}")
+                break
 
     # Invoke save_popular_tags when fetch_data finishes
     save_tags_and_data.delay()
 
-    # # Invoke save_score_complexity when fetch_data finishes
-    # save_score_complexity.delay()
-    #
-    # # Invoke save_complexity_quartile_over_time when fetch_data finishes
-    # save_complexity_quartile_over_time.delay()
-    #
-    # # Invoke save_tag_statistics when fetch_data finishes
-    # save_tag_statistics.delay()
-    #
-    # # Invoke save_top_users when fetch_data finishes
-    # save_top_users.delay()
-    #
-    # # Invoke save_top_questions when fetch_data finishes
-    # save_top_questions.delay()
-    #
-    # # Invoke update_tags_length when fetch_data finishes
-    # update_tags_length.delay()
-    #
-    # # Invoke update_complexity_score when update_tags_length finishes
-    # update_complexity_score.delay()
-    #
-    # # Invoke update_complexity_score when update_tags_length finishes
-    # save_tag_percentages.delay()
+    # Invoke save_score_complexity when fetch_data finishes
+    save_score_complexity.delay()
+
+    # Invoke save_complexity_quartile_over_time when fetch_data finishes
+    save_complexity_quartile_over_time.delay()
+
+    # Invoke save_tag_statistics when fetch_data finishes
+    save_tag_statistics.delay()
+
+    # Invoke save_top_users when fetch_data finishes
+    save_top_users.delay()
+
+    # Invoke save_top_questions when fetch_data finishes
+    save_top_questions.delay()
+
+    # Invoke update_tags_length when fetch_data finishes
+    update_tags_length.delay()
+
+    # Invoke update_complexity_score when update_tags_length finishes
+    update_complexity_score.delay()
+
+    # Invoke update_complexity_score when update_tags_length finishes
+    save_tag_percentages.delay()
