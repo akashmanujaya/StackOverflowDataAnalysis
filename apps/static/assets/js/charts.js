@@ -4,6 +4,9 @@ charts = {
         let chartConfig = {
           maintainAspectRatio: false,
           legend: {
+            labels: {
+                fontColor: 'rgb(255,255,255)' // Change this to the color you want
+            },
             display: false
           },
           tooltips: {
@@ -91,6 +94,9 @@ charts = {
         let chartConfig = {
           maintainAspectRatio: false,
           legend: {
+            labels: {
+                fontColor: 'rgb(255,255,255)' // Change this to the color you want
+            },
             display: false
           },
           tooltips: {
@@ -207,29 +213,29 @@ charts = {
         let ctx = document.getElementById("score_vs_complexity_scatter").getContext('2d');
 
         let config = {
-        type: 'scatter',
-        data: {
-          datasets: [{
-            label: "Complexity vs Score",
-            data: data,
-            backgroundColor: 'rgba(192,116,75,0.2)',
-            borderColor: 'rgb(250,139,44)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            xAxes: [{
-              type: 'linear',
-              position: 'bottom',
-              ticks: {
-                beginAtZero: true
+            type: 'scatter',
+            data: {
+              datasets: [{
+                label: "Complexity vs Score",
+                data: data,
+                backgroundColor: 'rgba(192,116,75,0.2)',
+                borderColor: 'rgb(250,139,44)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                xAxes: [{
+                  type: 'linear',
+                  position: 'bottom',
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
               }
-            }]
-          }
-        }
-      };
+            }
+          };
 
         new Chart(ctx, config);
     },
@@ -369,7 +375,105 @@ charts = {
         };
 
         new Chart(ctx, config);
+    },
+
+    tagPercentageChart: null,
+    initTagPercentage: function(chartData){
+        let chartConfig = {
+          maintainAspectRatio: false,
+          legend: {
+            labels: {
+                fontColor: 'rgb(255,255,255)' // Change this to the color you want
+            },
+            display: true  // Change to 'true' to display the legend
+          },
+          tooltips: {
+            backgroundColor: '#f5f5f5',
+            titleFontColor: '#333',
+            bodyFontColor: '#666',
+            bodySpacing: 4,
+            xPadding: 12,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest"
+          },
+          responsive: true,
+          scales: {
+            yAxes: [{
+                barPercentage: 1.6,
+                gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(29,140,248,0.0)',
+                    zeroLineColor: "transparent",
+                },
+                ticks: {
+                    suggestedMin: 50,
+                    suggestedMax: 100, // Limit maximum value to 100
+                    padding: 20,
+                    fontColor: "#ff8a76"
+                }
+            }],
+            xAxes: [{
+              barPercentage: 1.6,
+              gridLines: {
+                drawBorder: false,
+                color: 'rgba(220,53,69,0.1)',
+                zeroLineColor: "transparent",
+              },
+              ticks: {
+                padding: 20,
+                fontColor: "#ff8a76"
+              }
+            }]
+          }
+        };
+
+        let ctx = document.getElementById("tag_percentage").getContext('2d');
+
+        let datasets = chartData.map(function (tagData) {
+          let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+          gradientStroke.addColorStop(1, 'rgba(72,72,176,0.1)');
+          gradientStroke.addColorStop(0.4, 'rgba(72,72,176,0.0)');
+          gradientStroke.addColorStop(0, 'rgba(119,52,169,0)');
+
+          let color = getRandomColor();
+
+
+          return {
+            label: tagData.tag,
+            fill: true,
+            backgroundColor: gradientStroke,
+            borderColor: color,
+            borderWidth: 2,
+            borderDash: [],
+            borderDashOffset: 0.0,
+            pointBackgroundColor: color,
+            pointBorderColor: 'rgba(255,255,255,0)',
+            pointHoverBackgroundColor: color,
+            pointBorderWidth: 20,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 15,
+            pointRadius: 4,
+            data: Object.values(tagData.data),
+          };
+        });
+
+        let config = {
+          type: 'line',
+          data: {
+            labels: Object.keys(chartData[0].data),  // Assuming all tags have the same years
+            datasets: datasets
+          },
+          options: chartConfig
+        };
+
+        if (this.tagPercentageChart) {
+          this.tagPercentageChart.destroy();
+        }
+
+        this.tagPercentageChart = new Chart(ctx, config);
     }
+
 
 };
 
@@ -379,5 +483,18 @@ function getGradientColor(score) {
     let b = 0;
     return 'rgb(' + Math.round(r) + ',' + Math.round(g) + ',' + b + ')';
 }
+
+// Function to generate random colors
+function getRandomColor() {
+    const h = Math.floor(Math.random() * (240 - 0 + 1)) + 0; // hue: between red (0) and blue (240)
+    const s = 100; // saturation: 100% to make it bright
+    const l = 50; // lightness: 50% to avoid it being too dark or too bright
+
+    return `hsl(${h}, ${s}%, ${l}%)`;
+}
+
+
+
+
 
 

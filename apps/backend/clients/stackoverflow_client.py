@@ -13,22 +13,25 @@ class StackOverflowClient:
         self.ac_key = key
 
     def fetch_questions(self, page, tag):
-        params = {
-            'site': 'stackoverflow',
-            'tagged': tag,
-            'sort': 'creation',
-            'key': self.ac_key,
-            'access_token': self.ac_token,
-            'page': page,
-            'pagesize': self.PAGE_SIZE,
-            'order': 'desc',
-            'filter': 'withbody'
-        }
+        try:
+            params = {
+                'site': 'stackoverflow',
+                'tagged': tag,
+                'sort': 'creation',
+                'key': self.ac_key,
+                'access_token': self.ac_token,
+                'page': page,
+                'pagesize': self.PAGE_SIZE,
+                'order': 'desc',
+                'filter': 'withbody'
+            }
 
-        response = requests.get(self.BASE_URL, params=params)
-        response.raise_for_status()  # raise an exception for HTTP errors
+            response = requests.get(self.BASE_URL, params=params)
+            response.raise_for_status()  # raise an exception for HTTP errors
 
-        return response.json()
+            return response.json()
+        except:
+            pass
 
     def fetch_all_questions(self):
         for tag in self.tags:
@@ -36,10 +39,8 @@ class StackOverflowClient:
                 for page in range(1, self.MAX_PAGES + 1):
                     data = self.fetch_questions(page, tag)
                     if 'items' in data:
-                        print(f"Length of data set is: {len(data['items'])}")
                         yield data['items']
                         if not data['has_more']:
-                            print(f'Stopping at page {page} for {tag} because no more data is available')
                             break
                     # Check remaining quota and pause if it's low
                     if 'quota_remaining' in data and data['quota_remaining'] < 10:
@@ -49,5 +50,3 @@ class StackOverflowClient:
             except (ValueError, KeyError, Exception) as ex:
                 print(f"Something happened: {ex}")
                 continue
-
-

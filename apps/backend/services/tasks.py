@@ -1,14 +1,14 @@
 from celery import Celery
-from mongoengine import connect
 from dotenv import load_dotenv
 from apps.backend.clients.crossvalidated_client import CrossValidatedClient
 from apps.backend.clients.stackoverflow_client import StackOverflowClient
 from apps.backend.database_manager import DatabaseManager
 from apps.backend.database import Tag, Question, User
 from apps.backend.services.complexity_score import ComplexityAnalyzer
+import datetime as dt
 from datetime import datetime
 import os
-from urllib.parse import quote_plus
+from apps import config
 import json
 import random
 import numpy as np
@@ -17,12 +17,6 @@ from scipy import stats
 
 # Load .env file
 load_dotenv()
-
-# Replace these with your MongoDB settings
-db_name = quote_plus(os.environ["MONGO_DB_NAME"])
-username = quote_plus(os.environ["MONGO_DB_USER"])
-password = quote_plus(os.environ["MONGO_DB_PASSWORD"])
-host = os.environ["MONGO_DB_HOST"]
 
 # This gives you the relative path from environment variable
 data_file_path = os.getenv('DATA_FILE_PATH')
@@ -39,15 +33,14 @@ celery_app.conf.beat_schedule = {
 }
 
 # Establish a connection to the MongoDB server
-# connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
+config.initiate_connection()
 
-connect(
-    db=db_name,  # Replace with your database name
-    host='localhost',  # Replace with your MongoDB server host
-    port=27017,  # Replace with your MongoDB server port
-    # username='your_username',  # Replace with your MongoDB username if required
-    # password='your_password',  # Replace with your MongoDB password if required
-)
+# Get the directory of the current script file
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Construct the full paths to your files
+stackoverflow_tags_path = os.path.join(current_dir, 'stackoverflow_tags.txt')
+cross_validated_tags_path = os.path.join(current_dir, 'cross_validated_tags.txt')
 
 
 @celery_app.task(name="apps.backend.services.tasks.update_tags_length")
@@ -92,32 +85,25 @@ def save_top_users():
 @celery_app.task(name="apps.backend.services.tasks.save_popular_tags")
 def save_popular_tags():
     # Get top 10 tags
-    top_tags = Tag.objects().order_by('-tags_length')[:10]
-
-    # Serialize the tags
-    serialized_tags = [tag.tag_name for tag in top_tags]
+    top_tags = get_unique_tags()
 
     # Define the file path
     file_path = os.path.join(data_file_path, 'popular_tags.json')
 
     # Write the serialized data to the file
     with open(file_path, 'w') as file:
-        file.write(json.dumps(serialized_tags))
+        file.write(json.dumps(top_tags))
 
 
 @celery_app.task(name="apps.backend.services.tasks.save_tags_and_data")
 def save_tags_and_data():
     # Define a dictionary to store all the data
     all_data = {}
-
-    # Get top 10 tags
-    top_tags = Tag.objects().order_by('-tags_length')[:10]
-
-    # Serialize the tags
-    all_data['tags'] = [tag.tag_name for tag in top_tags]
+    tag_list = []  # initialize an empty tag list
 
     # Fetch data for each tag
-    for tag_name in all_data['tags']:
+    unique_tags = get_unique_tags()
+    for tag_name in unique_tags:
         # Get the tag with tag_name
         tag = Tag.objects(tag_name=tag_name).first()
 
@@ -132,7 +118,15 @@ def save_tags_and_data():
 
         # Sort the data by year and convert to the required format
         sorted_data = sorted(data.items(), key=lambda x: x[0])
-        all_data[tag_name] = [(str(year), count) for year, count in sorted_data]
+        formatted_data = [(str(year), count) for year, count in sorted_data]
+
+        # If there's no year data for the tag, skip adding it to all_data
+        if sorted_data:
+            all_data[tag_name] = formatted_data
+            tag_list.append(tag_name)  # add tag to the list only if it has data
+
+    # add the final tag list to all_data
+    all_data['tags'] = tag_list
 
     # Define the file path
     file_path = os.path.join(data_file_path, 'tags_and_data.json')
@@ -146,29 +140,30 @@ def save_tags_and_data():
 @celery_app.task(name="apps.backend.services.tasks.save_tag_statistics")
 def save_tag_statistics():
     # Get the top 10 tags
-    top_tags = Tag.objects().order_by('-tags_length')[:10]
+    tags = get_unique_tags()
 
     # Prepare a list to store the tag data
     tag_data = []
 
     # Iterate through each tag
-    for tag in top_tags:
+    for tag in tags:
         # Get all questions associated with this tag
         questions = Question.objects.filter(tags=tag)
 
         # Calculate mean, median and mode
         scores = [question.complexity_score for question in questions]
-        mean = np.mean(scores)
-        median = np.median(scores)
-        mode = stats.mode(scores)[0][0] if scores else np.nan  # Take only the first mode
+        if scores:
+            mean = np.mean(scores)
+            median = np.median(scores)
+            mode = stats.mode(scores)[0][0] if scores else np.nan  # Take only the first mode
 
-        # Append a new dictionary to tag_data
-        tag_data.append({
-            'tag': tag.tag_name,
-            'mean': mean,
-            'median': median,
-            'mode': float(mode)  # make sure mode is float not numpy.float64
-        })
+            # Append a new dictionary to tag_data
+            tag_data.append({
+                'tag': tag,
+                'mean': mean,
+                'median': median,
+                'mode': float(mode)  # make sure mode is float not numpy.float64
+            })
 
     # Define the file path
     file_path = os.path.join(data_file_path, 'tags_statistics.json')
@@ -264,6 +259,67 @@ def save_top_questions():
         file.write(json.dumps(serialized_questions))
 
 
+def get_unique_tags():
+    tags = []
+
+    with open(stackoverflow_tags_path, 'r') as file:
+        tags += file.read().splitlines()
+
+    with open(cross_validated_tags_path, 'r') as file:
+        tags += file.read().splitlines()
+
+    return list(set(tags))
+
+
+def calculate_tag_percentage(tag_name, year):
+    start_date = dt.datetime(year, 1, 1)
+    end_date = dt.datetime(year + 1, 1, 1)
+
+    # Get the tag object
+    tag = Tag.objects(tag_name=tag_name).first()
+
+    # Calculate the total number of questions in the year
+    total_questions = Question.objects(creation_date__gte=start_date, creation_date__lt=end_date).count()
+
+    # Calculate the total number of questions with the given tag in the year
+    tag_questions = Question.objects(creation_date__gte=start_date, creation_date__lt=end_date, tags=tag).count()
+
+    # Calculate the percentage (with two decimal points)
+    percentage = round((tag_questions / total_questions) * 100, 2)
+
+    return percentage
+
+
+@celery_app.task(name="apps.backend.services.tasks.save_tag_percentages")
+def save_tag_percentages():
+    # get current year
+    current_year = dt.datetime.now().year
+
+    # get unique tags
+    tags = get_unique_tags()
+
+    tag_percentages = {}
+
+    # loop over each tag
+    for tag in tags:
+        tag_percentages[tag] = {}
+
+        # loop over last 10 years
+        for year in range(current_year - 9, current_year + 1):
+            # calculate percentage for each tag
+            percentage = calculate_tag_percentage(tag, year)
+
+            # add percentage to the tag dict
+            tag_percentages[tag][str(year)] = percentage
+
+    # Define the file path
+    file_path = os.path.join(data_file_path, 'tag_percentages.json')
+
+    # write the data to a json file
+    with open(file_path, 'w') as file:
+        file.write(json.dumps(tag_percentages))
+
+
 def serialize_user(user):
     return {
         'user_id': str(user.id),
@@ -275,110 +331,128 @@ def serialize_user(user):
 
 
 def calculate_question_age(creation_date):
-    now = datetime.utcnow()  # this will now create a timezone naive datetime object
-    age = (now - creation_date).total_seconds() / (60 * 60 * 24)  # convert to days
-    return age
+    try:
+        date_obj = datetime.strptime(creation_date, '%Y-%m-%d %H:%M:%S')
+        now = datetime.utcnow()  # this will now create a timezone naive datetime object
+        age = (now - date_obj).total_seconds() / (60 * 60 * 24)  # convert to days
+        return age
+    except (ValueError, Exception) as ex:
+        raise f"Erros from calculate_question_age function: {ex}"
+
 
 def calculate_time_since_last_edit(last_edit_date):
-    if last_edit_date:  # if the question has been edited
-        now = datetime.utcnow()
-        time_since_last_edit = (now - last_edit_date).total_seconds() / (60 * 60 * 24)  # convert to days
-    else:  # if the question has not been edited
-        time_since_last_edit = None
-    return time_since_last_edit
+    try:
+        if last_edit_date:  # if the question has been edited
+            date_obj = datetime.strptime(last_edit_date, '%Y-%m-%d %H:%M:%S')
+            now = datetime.utcnow()
+            time_since_last_edit = (now - date_obj).total_seconds() / (60 * 60 * 24)  # convert to days
+        else:  # if the question has not been edited
+            time_since_last_edit = None
+        return time_since_last_edit
+    except (ValueError, Exception) as ex:
+        print(f"Erros from calculate_question_age function: {ex}")
 
 
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
-    # Initialize a DatabaseManager instance with your database credentials
-    db_manager = DatabaseManager()
-
-    # Get the directory of the current script file
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-
-    # Construct the full paths to your files
-    stackoverflow_tags_path = os.path.join(current_dir, 'stackoverflow_tags.txt')
-    cross_validated_tags_path = os.path.join(current_dir, 'cross_validated_tags.txt')
-
-    # Read tags from text files
-    with open(stackoverflow_tags_path, 'r') as file:
-        stack_overflow_tags = [line.strip() for line in file.readlines()]
-
-    with open(cross_validated_tags_path, 'r') as file:
-        cross_validated_tags = [line.strip() for line in file.readlines()]
-
-    stackoverflow_client = StackOverflowClient(
-        stack_overflow_tags,
-        os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
-        os.environ['STACK_EXCHANGE_KEY']
-    )
-
-    cross_validated_client = CrossValidatedClient(
-        cross_validated_tags,
-        os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
-        os.environ['STACK_EXCHANGE_KEY']
-    )
-
-    for items in stackoverflow_client.fetch_all_questions():
-        for question in items:
-            try:
-                if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
-                    user = db_manager.insert_user(question['owner'])
-                    question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
-                        '%Y-%m-%d %H:%M:%S')
-                    if 'last_edit_date' in question:
-                        question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
-                            '%Y-%m-%d %H:%M:%S')
-                    question['user'] = user
-                    question['source'] = 'stackoverflow'
-                    question['question_length'] = len(question['body'])
-                    question['question_age'] = calculate_question_age(question['creation_date'])
-                    question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
-                    tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
-                    db_manager.insert_question(question, tags)
-            except Exception as ex:
-                print(f"Error Occurred: {ex}")
-
-    for items in cross_validated_client.fetch_all_questions():
-        for question in items:
-            try:
-                if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
-                    user = db_manager.insert_user(question['owner'])
-                    question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
-                        '%Y-%m-%d %H:%M:%S')
-                    if 'last_edit_date' in question:
-                        question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
-                            '%Y-%m-%d %H:%M:%S')
-                    question['user'] = user
-                    question['source'] = 'crossvalidated'
-                    question['question_length'] = len(question['body'])
-                    question['question_age'] = calculate_question_age(question['creation_date'])
-                    question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
-                    tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
-                    db_manager.insert_question(question, tags)
-            except Exception as ex:
-                print(f"Error Occurred: {ex}")
+    # # Initialize a DatabaseManager instance with your database credentials
+    # db_manager = DatabaseManager()
+    #
+    # # Read tags from text files
+    # with open(stackoverflow_tags_path, 'r') as file:
+    #     stack_overflow_tags = [line.strip() for line in file.readlines()]
+    #
+    # with open(cross_validated_tags_path, 'r') as file:
+    #     cross_validated_tags = [line.strip() for line in file.readlines()]
+    #
+    # stackoverflow_client = StackOverflowClient(
+    #     stack_overflow_tags,
+    #     os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
+    #     os.environ['STACK_EXCHANGE_KEY']
+    # )
+    #
+    # cross_validated_client = CrossValidatedClient(
+    #     cross_validated_tags,
+    #     os.environ['STACK_EXCHANGE_ACCESS_TOKEN'],
+    #     os.environ['STACK_EXCHANGE_KEY']
+    # )
+    #
+    # for items in stackoverflow_client.fetch_all_questions():
+    #     for question in items:
+    #         try:
+    #             if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
+    #                 user = db_manager.insert_user(question['owner'])
+    #                 question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
+    #                     '%Y-%m-%d %H:%M:%S')
+    #                 if 'last_edit_date' in question:
+    #                     question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
+    #                         '%Y-%m-%d %H:%M:%S')
+    #                     question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
+    #
+    #                 else:
+    #                     question['last_edit_date'] = None
+    #                     question['time_since_last_edit'] = None
+    #
+    #                 question['user'] = user
+    #                 question['source'] = 'stackoverflow'
+    #                 question['question_length'] = len(question['body'])
+    #                 question['question_age'] = calculate_question_age(question['creation_date'])
+    #
+    #                 tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
+    #                 db_manager.insert_question(question, tags)
+    #         except Exception as ex:
+    #             print(f"Error Occurred from fetch_data function stackoverflow_client: {ex}")
+    #             break
+    #
+    # for items in cross_validated_client.fetch_all_questions():
+    #     for question in items:
+    #         try:
+    #             if question['score'] > 0 and 'owner' in question and 'user_id' in question['owner']:
+    #                 user = db_manager.insert_user(question['owner'])
+    #                 question['creation_date'] = datetime.utcfromtimestamp(question['creation_date']).strftime(
+    #                     '%Y-%m-%d %H:%M:%S')
+    #                 if 'last_edit_date' in question:
+    #                     question['last_edit_date'] = datetime.utcfromtimestamp(question['last_edit_date']).strftime(
+    #                         '%Y-%m-%d %H:%M:%S')
+    #                     question['time_since_last_edit'] = calculate_time_since_last_edit(question['last_edit_date'])
+    #                 else:
+    #                     question['last_edit_date'] = None
+    #                     question['time_since_last_edit'] = None
+    #
+    #                 question['user'] = user
+    #                 question['source'] = 'crossvalidated'
+    #                 question['question_length'] = len(question['body'])
+    #                 question['question_age'] = calculate_question_age(question['creation_date'])
+    #
+    #                 tags = [db_manager.get_or_create_tag(tag) for tag in question['tags']]
+    #                 db_manager.insert_question(question, tags)
+    #         except Exception as ex:
+    #             print(f"Error Occurred from fetch_data function cross_validated_client: {ex}")
+    #             break
 
     # Invoke save_popular_tags when fetch_data finishes
     save_tags_and_data.delay()
 
-    # Invoke save_score_complexity when fetch_data finishes
-    save_score_complexity.delay()
-
-    # Invoke save_complexity_quartile_over_time when fetch_data finishes
-    save_complexity_quartile_over_time.delay()
-
-    # Invoke save_tag_statistics when fetch_data finishes
-    save_tag_statistics.delay()
-
-    # Invoke save_top_users when fetch_data finishes
-    save_top_users.delay()
-
-    # Invoke save_top_questions when fetch_data finishes
-    save_top_questions.delay()
-
-    # Invoke update_tags_length when fetch_data finishes
-    update_tags_length.delay()
-
-    # Invoke update_complexity_score when update_tags_length finishes
-    update_complexity_score.delay()
+    # # Invoke save_score_complexity when fetch_data finishes
+    # save_score_complexity.delay()
+    #
+    # # Invoke save_complexity_quartile_over_time when fetch_data finishes
+    # save_complexity_quartile_over_time.delay()
+    #
+    # # Invoke save_tag_statistics when fetch_data finishes
+    # save_tag_statistics.delay()
+    #
+    # # Invoke save_top_users when fetch_data finishes
+    # save_top_users.delay()
+    #
+    # # Invoke save_top_questions when fetch_data finishes
+    # save_top_questions.delay()
+    #
+    # # Invoke update_tags_length when fetch_data finishes
+    # update_tags_length.delay()
+    #
+    # # Invoke update_complexity_score when update_tags_length finishes
+    # update_complexity_score.delay()
+    #
+    # # Invoke update_complexity_score when update_tags_length finishes
+    # save_tag_percentages.delay()

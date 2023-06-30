@@ -1,6 +1,7 @@
 import os
 from decouple import config
 from dotenv.main import load_dotenv
+from mongoengine import connect, disconnect
 
 load_dotenv()
 
@@ -39,3 +40,19 @@ config_dict = {
     'Production': ProductionConfig,
     'Debug': DebugConfig
 }
+
+
+def initiate_connection():
+    con = Config()
+    mongodb_settings = con.MONGODB_SETTINGS
+
+    disconnect()
+    # connect(host=f"mongodb+srv://{mongodb_settings['username']}:{mongodb_settings['password']}@{mongodb_settings['host']}/{mongodb_settings['db']}?retryWrites=true&w=majority")
+    connect(
+        db=mongodb_settings['db'],  # Replace with your database name
+        host='localhost',  # Replace with your MongoDB server host
+        port=27017,  # Replace with your MongoDB server port
+        # username='your_username',  # Replace with your MongoDB username if required
+        # password='your_password',  # Replace with your MongoDB password if required
+    )
+

@@ -19,6 +19,28 @@ def predictions():
     return render_template('home/predictions.html', segment='predictions')
 
 
+@blueprint.route('/ngram')
+def ngrqm():
+    return render_template('home/ngram_viewer.html', segment='ngram')
+
+
+@blueprint.route('/api/tag_percentage')
+def tag_percentage():
+    try:
+        tags = request.args.get('tags').split(',')
+        start_year = int(request.args.get('start_year'))
+        end_year = int(request.args.get('end_year'))
+
+        response_data = get_tag_percentage(tags, start_year, end_year)
+
+        if 'error' in response_data:
+            return response_data, 500
+
+        return jsonify(response_data)
+    except Exception as ex:
+        return jsonify({'error': f'Something went wrong: {ex}'}), 500
+
+
 @blueprint.route('/api/complexity_scores')
 def get_complexity_hist():
     return get_complexity_scores()

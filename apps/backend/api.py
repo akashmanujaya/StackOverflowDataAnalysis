@@ -169,3 +169,43 @@ def get_calculated_com_score(text, tag_count=0):
     com_analyser = ComplexityAnalyzer()
     score = com_analyser.calculate_complexity(text, tag_count)
     return score
+
+
+def get_tag_percentage(tags, start_year, end_year):
+    try:
+        # Define the file path
+        file_path = os.path.join(data_file_path, 'tag_percentages.json')
+
+        # Check if the file exists
+        if not os.path.isfile(file_path):
+            return {'error': 'File not found'}
+
+        # Read the data from the file
+        with open(file_path, 'r') as file:
+            all_data = json.load(file)
+
+        # Initialize response data
+        response_data = []
+
+        # Process all requested tags
+        for tag_name in tags:
+            # Check if the tag exists in the data
+            if tag_name not in all_data:
+                continue  # Skip this tag if it doesn't exist in the data
+
+            # Filter the data for the current tag based on the year range
+            tag_data = {year: value for year, value in all_data[tag_name].items()
+                        if start_year <= int(year) <= end_year}
+
+            # Add the current tag data to the response
+            response_data.append({
+                'tag': tag_name,
+                'data': tag_data
+            })
+
+        # Return the data
+        return response_data
+
+    except Exception as ex:
+        return {'error': f'Something went wrong: {ex}'}
+

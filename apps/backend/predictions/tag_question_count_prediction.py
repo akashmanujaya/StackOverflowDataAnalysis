@@ -1,15 +1,16 @@
 import os
 import pickle
 import pandas as pd
-from mongoengine import connect
 from statsmodels.tsa.arima.model import ARIMA
-from apps.backend.database import Tag, Question
+from apps.backend.database import Question
+from apps import config
+from apps.backend.services.tasks import get_unique_tags
 
 
 def get_data_from_db():
-    connect(db='stack_exchange_analysis', host='localhost', port=27017)
+    config.initiate_connection()
 
-    tags = list(Tag.objects().order_by('-tags_length')[:10])
+    tags = get_unique_tags()
     data = []
 
     for tag in tags:

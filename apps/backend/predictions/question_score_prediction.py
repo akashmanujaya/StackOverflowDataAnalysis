@@ -4,19 +4,13 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 import os
 from sklearn.feature_extraction.text import TfidfVectorizer
-from mongoengine import connect
-from apps.backend.database import Tag, Question, User
+from apps.backend.database import Question
+from apps import config
 
 
 def get_data_from_db():
-    # Use your db connection details
-    connect(
-        db='stack_exchange_analysis',  # Replace with your database name
-        host='localhost',  # Replace with your MongoDB server host
-        port=27017,  # Replace with your MongoDB server port
-        # username='your_username',  # Replace with your MongoDB username if required
-        # password='your_password',  # Replace with your MongoDB password if required
-    )
+    # initiate database connection
+    config.initiate_connection()
 
     data = []
     for question in Question.objects():

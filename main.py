@@ -25,7 +25,7 @@ if DEBUG:
     app.logger.info('Environment = ' + get_config_mode)
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=5003)
+    app.run(host='127.0.0.1', port=8080)
     # a = ComplexityAnalyzer()
     # a.save_complexity_score()
     # fetch_data.delay()

@@ -1,0 +1,127 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Prediction {% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" rel="stylesheet" />
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="card card-chart">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h5 class="card-category d-none show-after-data-load">NGram</h5>
+            <h2 class="card-title d-none show-after-data-load">Tag Percentage</h2>
+          </div>
+          <div class="col-sm-6 d-none show-after-data-load">
+              <div class="container tag-percentage">
+                <select multiple class="form-control selectpicker" data-live-search="true" id="tag-selector"></select>
+                <div class="row d-flex mt-2">
+                    <div class="col-5">
+                        <select class="form-control" id="start-year"></select>
+                    </div>
+                    <div class="col-5">
+                        <select class="form-control" id="end-year"></select>
+                    </div>
+                    <div class="col-2">
+                        <div id="submit-filters" class="mt-2 d-flex flex-row justify-content-end" style="cursor: pointer;">
+                            <i class="tim-icons icon-zoom-split tag-percentage-search"></i>
+                        </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" style="height: 70vh">
+        <div class="chart-area" style="height: 100%">
+          <canvas id="tag_percentage"></canvas>
+          <div id="spinner-overlay" class="spinner-overlay" style="display: none;">
+            <div class="lds-ripple"><div></div><div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+<script>
+    $(document).ready(function() {
+        let now = new Date();
+        let currentYear = now.getFullYear();
+        let start_year = currentYear - 9;
+
+        // Populate year options
+        for(let year = start_year; year <= currentYear; year++) {
+            $('#start-year, #end-year').append(new Option(year, year));
+        }
+
+        // Set default year values
+        $('#start-year').val(currentYear - 5);
+        $('#end-year').val(currentYear);
+
+
+        $('#spinner-overlay').show();
+
+        $.getJSON('/api/tags', function(data) {
+            data.forEach((tag_info) => {
+                let option = $('<option>').val(tag_info).text(tag_info);
+                $('#tag-selector').append(option);
+            });
+
+            $('.selectpicker').selectpicker('refresh');
+
+            // Initialize with the first tag
+            if(data.length > 0) {
+                $('#tag-selector').selectpicker('val', data[0]);
+                fetchAndRenderData([data[0]], start_year, currentYear);
+            }
+        });
+
+        $('#submit-filters').click(function() {
+            let selectedTags = $('#tag-selector').val();
+            let start_year = $('#start-year').val();
+            let end_year = $('#end-year').val();
+
+            if (selectedTags.length === 0) {
+                // Show SweetAlert and stop the Ajax request
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'You need to select at least one tag',
+                });
+                return;
+            }
+
+            $('#spinner-overlay').show();
+            fetchAndRenderData(selectedTags, start_year, end_year);
+        });
+
+        function fetchAndRenderData(tags, start_year=2018, end_year=2023) {
+            let deferred = $.Deferred();
+
+            setTimeout(function(){
+                $.getJSON(`/api/tag_percentage?tags=${tags.join(',')}&start_year=${start_year}&end_year=${end_year}`)
+                  .done(function(data) {
+                    charts.initTagPercentage(data);
+                    $('#spinner-overlay').hide();
+                    $('.show-after-data-load').removeClass('d-none');
+                    deferred.resolve();
+                  });
+            }, 500)
+
+            return deferred.promise();
+        }
+    });
+</script>
+{% endblock javascripts %}

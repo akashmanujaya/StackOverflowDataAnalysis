@@ -9,6 +9,7 @@ from textstat import flesch_kincaid_grade, polysyllabcount
 from apps.backend.database import Question
 from mongoengine.errors import OperationError
 from collections import Counter
+from apps import config
 import json
 import numpy as np
 import os
@@ -21,12 +22,6 @@ nltk.download('stopwords')
 
 load_dotenv()
 
-# Replace these with your MongoDB settings
-db_name = quote_plus(os.environ["MONGO_DB_NAME"])
-# username = quote_plus(os.environ["MONGO_DB_USER"])
-# password = quote_plus(os.environ["MONGO_DB_PASSWORD"])
-host = os.environ["MONGO_DB_HOST"]
-
 # This gives you the relative path from environment variable
 data_file_path = os.getenv('DATA_FILE_PATH')
 
@@ -35,15 +30,7 @@ class ComplexityAnalyzer:
     stop_words = set(stopwords.words('english'))
 
     def __int__(self):
-        # Establish the connection
-        # connect(db=db_name, host=f'mongodb+srv://{username}:{password}@{host}/{db_name}?retryWrites=true&w=majority')
-        connect(
-            db=db_name,  # Replace with your database name
-            host='localhost',  # Replace with your MongoDB server host
-            port=27017,  # Replace with your MongoDB server port
-            # username='your_username',  # Replace with your MongoDB username if required
-            # password='your_password',  # Replace with your MongoDB password if required
-        )
+        config.initiate_connection()
 
     @staticmethod
     def normalize(value: float, max_value: float) -> float:

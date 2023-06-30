@@ -13466,3 +13466,45 @@ Copyright (c) 2015 Daniel Eden
 .form-control {
     height: auto !important;
 }
+
+
+
+.tag-percentage .dropdown{
+  position: unset !important;
+}
+
+.tag-percentage-search{
+  font: normal normal normal 1.5em/1 'Nucleo';
+}
+
+.bs-searchbox .form-control {
+  color: #ffffff;
+}
+
+.bootstrap-select .dropdown-menu.inner{
+  background-color: #1e1e2f;
+}
+
+.bootstrap-select .dropdown-menu {
+  background-color: #1e1e2f;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #fc701d;
+}
+
+.bootstrap-select .no-results {
+    background: #fc701d !important;
+}
+
+.bootstrap-select .dropdown-menu.inner{
+  max-height: 20vh;
+}
+
+.bootstrap-select.show-tick .dropdown-menu li a span.text {
+    color: white;
+}
+
+.bs-searchbox .form-control:focus {
+    border-color: #fc701d !important;
+}

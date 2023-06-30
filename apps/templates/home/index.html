@@ -3,7 +3,10 @@
 {% block title %} Dashboard {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" rel="stylesheet" />
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -17,9 +20,10 @@
                 <h2 class="card-title d-none show-after-data-load">Tags Trend</h2>
               </div>
               <div class="col-sm-6 d-none show-after-data-load">
-                <select class="form-control" id="tag-selector">
-                  <!-- tag options will be populated here -->
-                </select>
+                  <select class="form-control selectpicker" data-live-search="true" id="tag-selector"></select>
+{#                <select class="form-control" id="tag-selector">#}
+{#                  <!-- tag options will be populated here -->#}
+{#                </select>#}
               </div>
             </div>
           </div>
@@ -106,7 +110,8 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
   <script>
     $(document).ready(function() {
         $('#spinner-overlay').show();
@@ -124,6 +129,8 @@
                   firstTag = tag_info;
               }
           });
+
+          $('.selectpicker').selectpicker('refresh');
 
           // Set the selected tag to the first tag and trigger change event
           if(firstTag) {
