@@ -209,3 +209,24 @@ def get_tag_percentage(tags, start_year, end_year):
     except Exception as ex:
         return {'error': f'Something went wrong: {ex}'}
 
+
+def get_prediction_results():
+    try:
+        # Define the file path
+        file_path = os.path.join(data_file_path, 'prediction_results.json')
+
+        # Check if the file exists
+        if not os.path.isfile(file_path):
+            return jsonify({'error': 'File not found'}), 404
+
+        # Read the data from the file
+        with open(file_path, 'r') as file:
+            prediction_results = json.load(file)
+
+        # Return the data
+        return jsonify(prediction_results)
+
+    except Exception as e:
+        return str(e)
+
+

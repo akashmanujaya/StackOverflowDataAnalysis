@@ -1,5 +1,7 @@
 from apps import create_app
 from decouple import config
+
+from apps.backend.predictions.tag_question_count_prediction import TagQuestionPredictor
 from apps.config import config_dict
 from apps.backend.services.tasks import fetch_data
 from apps.backend.services.complexity_score import ComplexityAnalyzer
@@ -29,4 +31,7 @@ if __name__ == "__main__":
     # a = ComplexityAnalyzer()
     # a.save_complexity_score()
     # fetch_data.delay()
+
+    # predictor = TagQuestionPredictor()
+    # predictor.run()
 

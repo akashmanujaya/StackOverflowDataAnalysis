@@ -42,66 +42,69 @@
 {% block javascripts %}
     <script>
         $(document).ready(function() {
+            let allData = {};
+
             $('#spinner-overlay').show();
 
-            $.getJSON('/api/tags', function(data) {
-              let firstTag;
+            $.getJSON('/api/prediction_results', function(data) {
+                allData = data;
 
-              data.forEach((tag_info, index) => {
-                  let option = $('<option>').val(tag_info).text(tag_info);
-                  $('#tag-selector').append(option);
-
-                  if(index === 0) {
-                      firstTag = tag_info;
-                  }
-              });
-
-              if(firstTag) {
-                $('#spinner-overlay').show();
-                fetchAndRenderData(firstTag).then(function() {
-                    $('#spinner-overlay').hide();
-                    $('.show-after-data-load').removeClass('d-none');
+                Object.keys(data).forEach((tag, index) => {
+                    let option = $('<option>').val(tag).text(tag);
+                    $('#tag-selector').append(option);
                 });
-              }
+
+                // After populating the dropdown, set 'python' as the selected value
+                  if('python' in allData) {
+                    $('#tag-selector').val('python');
+                  }
+
+                  let selectedTag = $('#tag-selector').val();
+                  if(selectedTag in allData) {
+                    $('#spinner-overlay').show();
+                    console.log("here is all data:", allData[selectedTag]);
+                    fetchAndRenderData(selectedTag, allData[selectedTag]).then(function() {
+                      $('#spinner-overlay').hide();
+                      $('.show-after-data-load').removeClass('d-none');
+                    });
+                  }
             });
 
             $('#tag-selector').change(function() {
-              $('#spinner-overlay').show();
-              let selectedTag = $(this).val();
-              if (selectedTag === 'All') {
-                  // Fetch and render trends for all tags
-                  $.getJSON('/api/tags', function(data) {
-                      let fetchPromises = data.map(fetchAndRenderData);
-                      $.when(...fetchPromises).then(function() {
-                          $('#spinner-overlay').hide();
-                      });
-                  });
-              } else {
-                  // Fetch and render trend for the selected tag
-                  fetchAndRenderData(selectedTag).then(function() {
-                      $('#spinner-overlay').hide();
-                  });
-              }
+                $('#spinner-overlay').show();
+                let selectedTag = $(this).val();
 
+                if (selectedTag === 'All') {
+                    let fetchPromises = Object.keys(allData).map((tag) => fetchAndRenderData(tag, allData[tag]));
+                    $.when(...fetchPromises).then(function() {
+                        $('#spinner-overlay').hide();
+                    });
+                } else {
+                    fetchAndRenderData(selectedTag, allData[selectedTag]).then(function() {
+                        $('#spinner-overlay').hide();
+                    });
+                }
             });
 
-            function fetchAndRenderData(tag) {
+            function fetchAndRenderData(tag, data) {
+                console.log('Here is the main data comes to fetchAndRenderData:', data)
                 let deferred = $.Deferred();
 
                 setTimeout(function(){
-                    $.getJSON('/api/tag_prediction/' + tag, function(data) {
-                        let years = Object.keys(data);
-                        let values = Object.values(data);
-                        // Initialize the chart with the data
-                        // You need to define initPredictionTrendChart() in your chart helper
-                        charts.initPredictionTrendChart(years, values);
-                        deferred.resolve();
-                    });
+                    let years = Array.from({length: data.forecast.length}, (_, i) => i + 1);
+                    let actual_values = data["actual_data"];
+                    let forecast_values = data["forecast"];
+
+                    console.log("here is the years, actual_values and forrecat_values:", years, actual_values, forecast_values)
+                    // Initialize the chart with the data
+                    // You need to define initPredictionTrendChart() in your chart helper
+                    charts.initPredictionTrendChart(tag, years, actual_values, forecast_values);
+                    deferred.resolve();
                 }, 500)
 
                 return deferred.promise();
             }
         });
-
     </script>
+
 {% endblock javascripts %}

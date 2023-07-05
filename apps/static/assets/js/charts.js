@@ -90,14 +90,20 @@ charts = {
       },
 
     predictionTrendChart: null,
-    initPredictionTrendChart: function(x_axis, y_axis){
+    initPredictionTrendChart: function(tag, years, actual_values, forecast_values){
+
+        let labels = years;
+
+        let minDataPoint = Math.min(...actual_values, ...forecast_values) + 10;
+        let maxDataPoint = Math.max(...actual_values, ...forecast_values) + 10;
+
         let chartConfig = {
           maintainAspectRatio: false,
           legend: {
             labels: {
                 fontColor: 'rgb(255,255,255)' // Change this to the color you want
             },
-            display: false
+            display: true // Make legend visible
           },
           tooltips: {
             backgroundColor: '#f5f5f5',
@@ -119,10 +125,10 @@ charts = {
                 zeroLineColor: "transparent",
               },
               ticks: {
-                suggestedMin: 50,
-                suggestedMax: 110,
+                suggestedMin: minDataPoint,
+                suggestedMax: maxDataPoint,
                 padding: 20,
-                fontColor: "#ff8a76"
+                fontColor: "#ff8a76",
               }
             }],
             xAxes: [{
@@ -134,11 +140,15 @@ charts = {
               },
               ticks: {
                 padding: 20,
-                fontColor: "#ff8a76"
+                fontColor: "#ff8a76",
+                callback: function(value, index, values) { // Customizing x-axis labels
+                  return 'Day ' + value;
+                }
               }
             }]
           }
         };
+
 
         let ctx = document.getElementById("prediction_trends").getContext('2d');
 
@@ -147,29 +157,54 @@ charts = {
         gradientStroke.addColorStop(0.4, 'rgba(72,72,176,0.0)');
         gradientStroke.addColorStop(0, 'rgba(119,52,169,0)');
 
-        let config = {
-          type: 'line',
-          data: {
-            labels: x_axis,
-            datasets: [{
-              label: "Predicted No. of Questions",
-              fill: true,
-              backgroundColor: gradientStroke,
-              borderColor: '#fd7700',
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: '#f84d4d',
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: '#f84d4d',
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: y_axis,
-            }]
-          },
-          options: chartConfig
+        let actualDataSet = {
+            label: "Actual Data",
+            fill: true,
+            backgroundColor: gradientStroke,
+            borderColor: '#fd7700',
+            borderWidth: 2,
+            borderDash: [],
+            borderDashOffset: 0.0,
+            pointBackgroundColor: '#f84d4d',
+            pointBorderColor: 'rgba(255,255,255,0)',
+            pointHoverBackgroundColor: '#f84d4d',
+            pointBorderWidth: 20,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 15,
+            pointRadius: 4,
+            data: actual_values,
+        };
+
+        gradientStroke = ctx.createLinearGradient(0,230,0,50);
+        gradientStroke.addColorStop(1, 'rgba(66,134,121,0.15)');
+        gradientStroke.addColorStop(0.4, 'rgba(66,134,121,0.0)');
+        gradientStroke.addColorStop(0, 'rgba(66,134,121,0)');
+
+        let forecastDataSet = {
+            label: "Forecast Data",
+            fill: true,
+            backgroundColor: gradientStroke,
+            borderColor: '#00d6b4',
+            borderWidth: 2,
+            borderDash: [],
+            borderDashOffset: 0.0,
+            pointBackgroundColor: '#00d6b4',
+            pointBorderColor: 'rgba(255,255,255,0)',
+            pointHoverBackgroundColor: '#00d6b4',
+            pointBorderWidth: 20,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 15,
+            pointRadius: 4,
+            data: forecast_values,
+        };
+
+       let config = {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [actualDataSet, forecastDataSet]
+            },
+            options: chartConfig
         };
 
         if (this.predictionTrendChart) {

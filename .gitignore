@@ -153,7 +153,7 @@ dmypy.json
 cython_debug/
 
 #modals
-apps/backend/predictions/tag_question_count_prediction
+apps/backend/data_files/tag_question_count_prediction
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can

@@ -81,10 +81,15 @@
 
             $('.selectpicker').selectpicker('refresh');
 
-            // Initialize with the first tag
-            if(data.length > 0) {
-                $('#tag-selector').selectpicker('val', data[0]);
-                fetchAndRenderData([data[0]], start_year, currentYear);
+            // Check if 'python' is in the data array
+            let selectedTag = data.includes('python') ? 'python' : data[0];
+
+            if(selectedTag) {
+                // Set 'python' or the first tag in the dropdown as the selected value
+                $('#tag-selector').selectpicker('val', selectedTag);
+                let start_year = $('#start-year').val();
+                let end_year = $('#end-year').val();
+                fetchAndRenderData([selectedTag], start_year, end_year);
             }
         });
 

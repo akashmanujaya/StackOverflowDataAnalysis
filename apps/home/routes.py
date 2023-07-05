@@ -101,6 +101,13 @@ def tag_prediction(tag_name):
     return get_prediction(tag_name)
 
 
+@blueprint.route('/api/prediction_results')
+def prediction_results():
+    try:
+        return get_prediction_results()
+    except Exception as ex:
+        return jsonify({'error': f'Something went wrong: {ex}'}), 500
+
 # Helper - Extract current page name from request
 def get_segment(req):
     try:
