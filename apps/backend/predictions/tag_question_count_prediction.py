@@ -98,10 +98,10 @@ class TagQuestionPredictor:
 
     def run(self):
         try:
-            # data = self.get_data_from_db()
-            # data = self.prepare_data(data)
-            # models = self.train_model(data)
-            # self.save_models(models)
+            data = self.get_data_from_db()
+            data = self.prepare_data(data)
+            models = self.train_model(data)
+            self.save_models(models)
 
             # After saving models
             self.predict_and_save()

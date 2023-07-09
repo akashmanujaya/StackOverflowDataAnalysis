@@ -414,54 +414,75 @@ charts = {
 
     tagPercentageChart: null,
     initTagPercentage: function(chartData){
-        let chartConfig = {
-          maintainAspectRatio: false,
-          legend: {
-            labels: {
-                fontColor: 'rgb(255,255,255)' // Change this to the color you want
-            },
-            display: true  // Change to 'true' to display the legend
-          },
-          tooltips: {
-            backgroundColor: '#f5f5f5',
-            titleFontColor: '#333',
-            bodyFontColor: '#666',
-            bodySpacing: 4,
-            xPadding: 12,
-            mode: "nearest",
-            intersect: 0,
-            position: "nearest"
-          },
-          responsive: true,
-          scales: {
-            yAxes: [{
-                barPercentage: 1.6,
-                gridLines: {
-                    drawBorder: false,
-                    color: 'rgba(29,140,248,0.0)',
-                    zeroLineColor: "transparent",
+       let chartConfig = {
+            maintainAspectRatio: false,
+            legend: {
+                labels: {
+                    fontColor: 'rgb(255,255,255)' // Change this to the color you want
                 },
-                ticks: {
-                    suggestedMin: 50,
-                    suggestedMax: 100, // Limit maximum value to 100
+                display: true  // Change to 'true' to display the legend
+            },
+            tooltips: {
+                backgroundColor: '#f5f5f5',
+                titleFontColor: '#333',
+                bodyFontColor: '#666',
+                bodySpacing: 4,
+                xPadding: 12,
+                mode: "nearest",
+                intersect: 0,
+                position: "nearest"
+            },
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    barPercentage: 1.6,
+                    gridLines: {
+                        drawBorder: false,
+                        color: 'rgba(29,140,248,0.0)',
+                        zeroLineColor: "transparent",
+                    },
+                    ticks: {
+                        suggestedMin: 50,
+                        suggestedMax: 100, // Limit maximum value to 100
+                        padding: 20,
+                        fontColor: "#ff8a76"
+                    }
+                }],
+                xAxes: [{
+                  barPercentage: 1.6,
+                  gridLines: {
+                    drawBorder: false,
+                    color: 'rgba(220,53,69,0.1)',
+                    zeroLineColor: "transparent",
+                  },
+                  ticks: {
                     padding: 20,
                     fontColor: "#ff8a76"
+                  }
+                }]
+            },
+           interaction: {
+                mode: 'nearest'
+            },
+            // Add plugins for zooming
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy'
+                    },
+                    zoom: {
+                        enabled: true,
+                        mode: 'xy',
+                        onZoom: function({chart}) {
+                            // Show the reset button when a zoom starts
+                            document.getElementById('resetZoom').style.display = 'block';
+                        }
+                    }
                 }
-            }],
-            xAxes: [{
-              barPercentage: 1.6,
-              gridLines: {
-                drawBorder: false,
-                color: 'rgba(220,53,69,0.1)',
-                zeroLineColor: "transparent",
-              },
-              ticks: {
-                padding: 20,
-                fontColor: "#ff8a76"
-              }
-            }]
-          }
+            }
         };
+
 
         let ctx = document.getElementById("tag_percentage").getContext('2d');
 
@@ -507,6 +528,12 @@ charts = {
         }
 
         this.tagPercentageChart = new Chart(ctx, config);
+    },
+
+    resetTagPercentageZoom: function() {
+        if (this.tagPercentageChart) {
+            this.tagPercentageChart.resetZoom();
+        }
     }
 
 

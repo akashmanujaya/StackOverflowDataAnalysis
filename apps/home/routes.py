@@ -4,6 +4,11 @@ import json
 from apps.backend.api import *
 
 
+@blueprint.route('/test')
+def test():
+    return render_template('home/test.html', segment='test')
+
+
 @blueprint.route('/')
 def index():
     return render_template('home/index.html', segment='index')
@@ -107,6 +112,7 @@ def prediction_results():
         return get_prediction_results()
     except Exception as ex:
         return jsonify({'error': f'Something went wrong: {ex}'}), 500
+
 
 # Helper - Extract current page name from request
 def get_segment(req):
