@@ -29,6 +29,20 @@ def ngrqm():
     return render_template('home/ngram_viewer.html', segment='ngram')
 
 
+@blueprint.route('/api/get_coverage')
+def get_coverage():
+    try:
+        coverage_data = calculate_tag_coverage()
+
+        if 'error' in coverage_data:
+            return coverage_data, 500
+
+        return jsonify(coverage_data)
+
+    except Exception as ex:
+        return jsonify({'error': f'Something went wrong: {ex}'}), 500
+
+
 @blueprint.route('/api/tag_percentage')
 def tag_percentage():
     try:

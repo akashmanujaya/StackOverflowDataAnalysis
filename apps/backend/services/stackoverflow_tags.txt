@@ -49,3 +49,8 @@ optimization
 recommender-system
 word-embeddings
 bigdata
+matplotlib
+powerbi
+tableau-api
+sql
+numpy

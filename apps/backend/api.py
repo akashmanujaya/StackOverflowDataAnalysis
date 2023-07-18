@@ -229,4 +229,22 @@ def get_prediction_results():
     except Exception as e:
         return str(e)
 
+def calculate_tag_coverage():
+    try:
+        # Define the file path
+        file_path = os.path.join(data_file_path, 'tag_coverage.json')
+
+        # Check if the file exists
+        if not os.path.isfile(file_path):
+            return jsonify({'error': 'File not found'}), 404
+
+        # Read the data from the file
+        with open(file_path, 'r') as file:
+            tag_coverage = json.load(file)
+
+        # Return the data
+        return tag_coverage
+
+    except Exception as ex:
+        return jsonify({'error': f'Something went wrong: {ex}'}), 500
 

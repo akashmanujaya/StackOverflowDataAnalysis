@@ -41,6 +41,32 @@
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-header">
+                    <h4 class="card-title"> Tag Coverage with References</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table tablesorter " id="coverageTable">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th style="width: 30%">Topic Area</th>
+                                    <th style="width: 50%">Tags Included</th>
+                                    <th style="width: 20%">Coverage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be inserted here via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <!--Table-top 5 users -->
         <div class="col-lg-6 col-md-12 d-flex">
         <div class="card ">
@@ -106,121 +132,146 @@
       </div>
     </div>
 
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
-  <script>
-    $(document).ready(function() {
-        $('#spinner-overlay').show();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
 
-        $.getJSON('/api/tags', function(data) {
-          // Store first tag name
-          let firstTag;
-
-          data.forEach((tag_info, index) => {
-              let option = $('<option>').val(tag_info).text(tag_info);
-              $('#tag-selector').append(option);
-
-              // Capture the first tag name
-              if(index === 0) {
-                  firstTag = tag_info;
-              }
-          });
-
-          $('.selectpicker').selectpicker('refresh');
-
-          // Set the selected tag to the first tag and trigger change event
-          if(firstTag) {
+    <script>
+        $(document).ready(function() {
             $('#spinner-overlay').show();
-            fetchAndRenderData(firstTag).then(function() {
-                $('#spinner-overlay').hide();
-                $('.show-after-data-load').removeClass('d-none');
-            });
-          }
-        });
 
-        $('#tag-selector').change(function() {
-          $('#spinner-overlay').show();
-          let selectedTag = $(this).val();
-          if (selectedTag === 'All') {
-              // Fetch and render trends for all tags
-              $.getJSON('/api/tags', function(data) {
-                  let fetchPromises = data.map(fetchAndRenderData);
-                  $.when(...fetchPromises).then(function() {
+            $.getJSON('/api/tags', function(data) {
+              // Store first tag name
+              let firstTag;
+
+              data.forEach((tag_info, index) => {
+                  let option = $('<option>').val(tag_info).text(tag_info);
+                  $('#tag-selector').append(option);
+
+                  // Capture the first tag name
+                  if(index === 0) {
+                      firstTag = tag_info;
+                  }
+              });
+
+              $('.selectpicker').selectpicker('refresh');
+
+              // Set the selected tag to the first tag and trigger change event
+              if(firstTag) {
+                $('#spinner-overlay').show();
+                fetchAndRenderData(firstTag).then(function() {
+                    $('#spinner-overlay').hide();
+                    $('.show-after-data-load').removeClass('d-none');
+                });
+              }
+            });
+
+            $('#tag-selector').change(function() {
+              $('#spinner-overlay').show();
+              let selectedTag = $(this).val();
+              if (selectedTag === 'All') {
+                  // Fetch and render trends for all tags
+                  $.getJSON('/api/tags', function(data) {
+                      let fetchPromises = data.map(fetchAndRenderData);
+                      $.when(...fetchPromises).then(function() {
+                          $('#spinner-overlay').hide();
+                      });
+                  });
+              } else {
+                  // Fetch and render trend for the selected tag
+                  fetchAndRenderData(selectedTag).then(function() {
                       $('#spinner-overlay').hide();
                   });
-              });
-          } else {
-              // Fetch and render trend for the selected tag
-              fetchAndRenderData(selectedTag).then(function() {
-                  $('#spinner-overlay').hide();
-              });
-          }
+              }
 
-        });
+            });
 
-        function fetchAndRenderData(tag) {
-            let deferred = $.Deferred();
+            function fetchAndRenderData(tag) {
+                let deferred = $.Deferred();
 
-            setTimeout(function(){
-                $.getJSON('/api/tags/' + tag, function(data) {
-                    charts.initFirstOverallTrendChart(data.map(item => item[0]), data.map(item => item[1]));
-                    deferred.resolve();
+                setTimeout(function(){
+                    $.getJSON('/api/tags/' + tag, function(data) {
+                        charts.initFirstOverallTrendChart(data.map(item => item[0]), data.map(item => item[1]));
+                        deferred.resolve();
+                    });
+                }, 500)
+
+
+
+                return deferred.promise();
+            }
+
+            //get data for users table in dashboard
+            $.getJSON('/api/top_users', function(data) {
+                let topUsersTableBody = $('#top-users-table tbody');
+                topUsersTableBody.empty();
+                data.forEach(user => {
+                    let userRow = `<tr>
+                        <td>
+                            <img src="${user.profile_image}" alt="Avatar" width="50" height="50">
+                        </td>
+                        <td>
+                            <a href="${user.link}" target="_blank" class="link_with_underline">${user.display_name}</a>
+                        </td>
+                        <td>
+                            ${user.reputation.toLocaleString()}
+                        </td>
+                    </tr>`;
+                    topUsersTableBody.append(userRow);
                 });
-            }, 500)
-
-
-
-            return deferred.promise();
-        }
-
-        //get data for users table in dashboard
-        $.getJSON('/api/top_users', function(data) {
-            let topUsersTableBody = $('#top-users-table tbody');
-            topUsersTableBody.empty();
-            data.forEach(user => {
-                let userRow = `<tr>
-                    <td>
-                        <img src="${user.profile_image}" alt="Avatar" width="50" height="50">
-                    </td>
-                    <td>
-                        <a href="${user.link}" target="_blank" class="link_with_underline">${user.display_name}</a>
-                    </td>
-                    <td>
-                        ${user.reputation.toLocaleString()}
-                    </td>
-                </tr>`;
-                topUsersTableBody.append(userRow);
             });
-        });
 
-        //get data for questions table in dashboard
-        $.getJSON('/api/top_questions', function(data) {
-            let topQuestionsTableBody = $('#top-questions-table tbody');
-            topQuestionsTableBody.empty();
-            data.forEach(question => {
-                let questionRow = `<tr>
-                    <td>
-                        <a href="${question.link}" target="_blank" class="link_with_underline">${question.title.substring(0, 30)}...</a>
-                    </td>
-                    <td>
-                        ${question.view_count.toLocaleString()}
-                    </td>
-                    <td>
-                        <a href="${question.user.link}" target="_blank" class="link_with_underline">${question.user.display_name}</a>
-                    </td>
-                    <td>
-                        ${question.score.toLocaleString()}
-                    </td>
-                </tr>`;
-                topQuestionsTableBody.append(questionRow);
+            //get data for questions table in dashboard
+            $.getJSON('/api/top_questions', function(data) {
+                let topQuestionsTableBody = $('#top-questions-table tbody');
+                topQuestionsTableBody.empty();
+                data.forEach(question => {
+                    let questionRow = `<tr>
+                        <td>
+                            <a href="${question.link}" target="_blank" class="link_with_underline">${question.title.substring(0, 30)}...</a>
+                        </td>
+                        <td>
+                            ${question.view_count.toLocaleString()}
+                        </td>
+                        <td>
+                            <a href="${question.user.link}" target="_blank" class="link_with_underline">${question.user.display_name}</a>
+                        </td>
+                        <td>
+                            ${question.score.toLocaleString()}
+                        </td>
+                    </tr>`;
+                    topQuestionsTableBody.append(questionRow);
+                });
             });
-        });
 
-    });
-  </script>
+            //get data for coverage table
+            $.getJSON('/api/get_coverage', function(data) {
+                let coverageTableBody = $('#coverageTable tbody');
+                coverageTableBody.empty();
+
+                data.forEach(item => {
+                    let tags = item["Tags Included"].join(', ');
+                    let coveragePercentage = Math.round(item.Coverage);
+                    let row = `<tr>
+                        <td>${item["Topic Area"]}</td>
+                        <td>${tags}</td>
+                        <td>
+                            <div class="progress" style="height: min-content">
+                                <div class="progress-bar" role="progressbar" style="width: ${coveragePercentage}%; background-color: #fa6232;" aria-valuenow="${coveragePercentage}" aria-valuemin="0" aria-valuemax="100">${item.Coverage.toFixed(2)}%</div>
+                            </div>
+                        </td>
+                    </tr>`;
+                    coverageTableBody.append(row);
+                });
+
+            });
+
+
+        });
+    </script>
 
 {% endblock javascripts %}

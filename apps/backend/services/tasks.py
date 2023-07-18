@@ -363,6 +363,55 @@ def run_and_save_tag_predictions():
         print(f"Something went wrong: {ex}")
 
 
+@celery_app.task(name="apps.backend.services.tasks.generate_topic_coverage")
+def generate_topic_coverage():
+    # Define your topic areas and related tags
+    topic_areas = {
+        "Deep Learning": ["neural-networks", "tensorflow", "keras", "machine-learning"],
+        "Explainable AI (XAI)": ["machine-learning", "neural-networks"],
+        "Data cleaning and wrangling": ["pandas", "python"],
+        "Machine learning": ["regression", "machine-learning", "classification", "clustering", "cross-validation"],
+        "Data visualization": ["data-visualization", "matplotlib", "powerbi", "tableau-api"],
+        "Big Data Processing": ["bigdata"],
+        "Cloud Computing": ["bigdata"],
+        "Natural Language Processing (NLP)": ["nlp", "machine-learning", "neural-networks"],
+        "Mining the data": ["data-mining", "machine-learning"],
+        "NumPy": ["numpy", "python"],
+        "pandas": ["pandas", "python", "data-cleaning"],
+        "Matplotlib": ["matplotlib", "data-visualization"],
+        "scikit-learn": ["scikit-learn", "machine-learning", "classification", "regression", "clustering"],
+        "TensorFlow": ["tensorflow", "machine-learning", "neural-networks", "deep-learning"],
+        "Keras": ["keras", "machine-learning", "neural-networks", "deep-learning"],
+        "SAS": ["statistical-significance"],
+        "Statistics and probability": ["statistics", "probability", "hypothesis-testing", "distributions",
+                                       "mathematical-statistics", "statistical-significance", "confidence-interval"],
+    }
+
+    all_questions_count = Question.objects.count()  # total number of questions
+
+    results = []  # this will hold our final results
+
+    for topic, tags in topic_areas.items():
+        # Convert tag names to Tag objects
+        tag_objects = Tag.objects.filter(tag_name__in=tags)
+
+        tag_questions_count = Question.objects.filter(tags__in=tag_objects).count()
+
+        coverage = (tag_questions_count / all_questions_count) * 100  # percentage
+        results.append({
+            "Topic Area": topic,
+            "Tags Included": tags,
+            "Coverage": coverage
+        })
+
+    # Define the file path
+    file_path = os.path.join(data_file_path, 'tag_coverage.json')
+
+    # write the data to a json file
+    with open(file_path, 'w') as file:
+        file.write(json.dumps(results))
+
+
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
     # Initialize a DatabaseManager instance with your database credentials
@@ -461,11 +510,14 @@ def fetch_data():
     # Invoke update_tags_length when fetch_data finishes
     update_tags_length.delay()
 
-    # Invoke update_complexity_score when update_tags_length finishes
+    # Invoke update_complexity_score when fetch_data finishes
     update_complexity_score.delay()
 
-    # Invoke update_complexity_score when update_tags_length finishes
+    # Invoke update_complexity_score when fetch_data finishes
     save_tag_percentages.delay()
 
-    # Invoke update_complexity_score when update_tags_length finishes
+    # Invoke update_complexity_score when fetch_data finishes
     run_and_save_tag_predictions.delay()
+
+    # Invoke update_complexity_score when fetch_data finishes
+    generate_topic_coverage.delay()
