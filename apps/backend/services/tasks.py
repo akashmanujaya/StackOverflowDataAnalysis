@@ -5,6 +5,7 @@ from apps.backend.clients.stackoverflow_client import StackOverflowClient
 from apps.backend.database_manager import DatabaseManager
 from apps.backend.database import Tag, Question, User
 from apps.backend.predictions.tag_question_count_prediction import TagQuestionPredictor
+from apps.backend.services.celery_config import CeleryConfig
 from apps.backend.services.complexity_score import ComplexityAnalyzer
 import datetime as dt
 from datetime import datetime
@@ -15,6 +16,8 @@ import random
 import numpy as np
 from pandas import DataFrame
 from scipy import stats
+from celery import chain
+
 
 # Load .env file
 load_dotenv()
@@ -26,12 +29,8 @@ data_file_path = os.getenv('DATA_FILE_PATH')
 celery_app = Celery(__name__, broker='pyamqp://guest@localhost//')
 
 # Update tags length every hour
-celery_app.conf.beat_schedule = {
-    'fetch_data': {
-        'task': 'apps.backend.services.tasks.fetch_data',
-        'schedule': 60.0 * 60.0,
-    },
-}
+celery_app.conf.beat_schedule = CeleryConfig.CELERY_BEAT_SCHEDULE
+
 
 # Establish a connection to the MongoDB server
 config.initiate_connection()
@@ -45,7 +44,7 @@ cross_validated_tags_path = os.path.join(current_dir, 'cross_validated_tags.txt'
 
 
 @celery_app.task(name="apps.backend.services.tasks.update_tags_length")
-def update_tags_length():
+def update_tags_length(previous_task_result=None):
     # Your original code
     tags = Tag.objects.all()
     for tag in tags:
@@ -54,7 +53,7 @@ def update_tags_length():
 
 
 @celery_app.task(name="apps.backend.services.tasks.update_complexity_score")
-def update_complexity_score():
+def update_complexity_score(previous_task_result=None):
     # Initialize a ComplexityAnalyzer instance
     complexity_analyzer = ComplexityAnalyzer()
 
@@ -65,7 +64,7 @@ def update_complexity_score():
 
 
 @celery_app.task(name="apps.backend.services.tasks.save_top_users")
-def save_top_users():
+def save_top_users(previous_task_result=None):
     # Get top 5 users
     top_users = User.objects().order_by('-reputation')[:5]
 
@@ -97,7 +96,7 @@ def save_popular_tags():
 
 
 @celery_app.task(name="apps.backend.services.tasks.save_tags_and_data")
-def save_tags_and_data():
+def save_tags_and_data(previous_task_result=None):
     # Define a dictionary to store all the data
     all_data = {}
     tag_list = []  # initialize an empty tag list
@@ -139,7 +138,7 @@ def save_tags_and_data():
 
 
 @celery_app.task(name="apps.backend.services.tasks.save_tag_statistics")
-def save_tag_statistics():
+def save_tag_statistics(previous_task_result=None):
     # Get the top 10 tags
     tags = get_unique_tags()
 
@@ -176,7 +175,7 @@ def save_tag_statistics():
 
 
 @celery_app.task(name="apps.backend.services.tasks.save_score_complexity")
-def save_score_complexity():
+def save_score_complexity(previous_task_result=None):
     data = list(Question.objects().only('score', 'complexity_score'))
     sample_size = min(1000, len(data))  # adjust this as needed
     sampled_data = random.sample(data, sample_size)
@@ -190,7 +189,7 @@ def save_score_complexity():
 
 
 @celery_app.task(name="apps.backend.services.tasks.save_complexity_quartile_over_time")
-def save_complexity_quartile_over_time():
+def save_complexity_quartile_over_time(previous_task_result=None):
     questions = Question.objects.only('creation_date', 'complexity_score').all()
 
     # Create a DataFrame with creation_date and complexity_score
@@ -236,7 +235,7 @@ def save_complexity_quartile_over_time():
 
 
 @celery_app.task(name="apps.backend.services.tasks.save_top_questions")
-def save_top_questions():
+def save_top_questions(previous_task_result=None):
     # Get top 8 questions
     top_questions = Question.objects().order_by('-score')[:8]
 
@@ -292,7 +291,7 @@ def calculate_tag_percentage(tag_name, year):
 
 
 @celery_app.task(name="apps.backend.services.tasks.save_tag_percentages")
-def save_tag_percentages():
+def save_tag_percentages(previous_task_result=None):
     # get current year
     current_year = dt.datetime.now().year
 
@@ -355,7 +354,7 @@ def calculate_time_since_last_edit(last_edit_date):
 
 
 @celery_app.task(name="apps.backend.services.tasks.run_and_save_tag_predictions")
-def run_and_save_tag_predictions():
+def run_and_save_tag_predictions(previous_task_result=None):
     try:
         predictor = TagQuestionPredictor()
         predictor.run()
@@ -363,8 +362,17 @@ def run_and_save_tag_predictions():
         print(f"Something went wrong: {ex}")
 
 
+@celery_app.task(name="apps.backend.services.tasks.train_tag_predictions")
+def train_tag_predictions(previous_task_result=None):
+    try:
+        predictor = TagQuestionPredictor()
+        predictor.train_model()
+    except Exception as ex:
+        print(f"Something went wrong: {ex}")
+
+
 @celery_app.task(name="apps.backend.services.tasks.generate_topic_coverage")
-def generate_topic_coverage():
+def generate_topic_coverage(previous_task_result=None):
     # Define your topic areas and related tags
     topic_areas = {
         "Deep Learning": ["neural-networks", "tensorflow", "keras", "machine-learning"],
@@ -413,7 +421,7 @@ def generate_topic_coverage():
 
 
 @celery_app.task(name="apps.backend.services.tasks.calculate_summary")
-def calculate_summary():
+def calculate_summary(previous_task_result=None):
     # Calculate total number of questions
     total_questions = Question.objects.count()
 
@@ -447,7 +455,7 @@ def calculate_summary():
 
 
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
-def fetch_data():
+def fetch_data(previous_task_result=None):
     # Initialize a DatabaseManager instance with your database credentials
     db_manager = DatabaseManager()
 
@@ -523,38 +531,17 @@ def fetch_data():
                 print(f"Error Occurred from fetch_data function cross_validated_client: {ex}")
                 break
 
-    # Invoke save_popular_tags when fetch_data finishes
-    save_tags_and_data.delay()
-
-    # Invoke save_score_complexity when fetch_data finishes
-    save_score_complexity.delay()
-
-    # Invoke save_complexity_quartile_over_time when fetch_data finishes
-    save_complexity_quartile_over_time.delay()
-
-    # Invoke save_tag_statistics when fetch_data finishes
-    save_tag_statistics.delay()
-
-    # Invoke save_top_users when fetch_data finishes
-    save_top_users.delay()
-
-    # Invoke save_top_questions when fetch_data finishes
-    save_top_questions.delay()
-
-    # Invoke update_tags_length when fetch_data finishes
-    update_tags_length.delay()
-
-    # Invoke update_complexity_score when fetch_data finishes
-    update_complexity_score.delay()
-
-    # Invoke update_complexity_score when fetch_data finishes
-    save_tag_percentages.delay()
-
-    # Invoke update_complexity_score when fetch_data finishes
-    run_and_save_tag_predictions.delay()
-
-    # Invoke update_complexity_score when fetch_data finishes
-    generate_topic_coverage.delay()
-
-    # Invoke update_complexity_score when fetch_data finishes
-    calculate_summary.delay()
+    chain(
+        update_tags_length.s(),
+        save_top_users.s(),
+        save_top_questions.s(),
+        update_complexity_score.s(),
+        save_score_complexity.s(),
+        save_complexity_quartile_over_time.s(),
+        save_tag_statistics.s(),
+        save_tag_percentages.s(),
+        run_and_save_tag_predictions.s(),
+        generate_topic_coverage.s(),
+        save_tags_and_data.s(),
+        calculate_summary.s()
+    ).apply_async()

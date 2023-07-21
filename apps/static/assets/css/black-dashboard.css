@@ -3281,7 +3281,7 @@ input[type="button"].btn-block {
   align-items: center; }
 
 .navbar-toggler {
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 1rem 0.25rem 0rem;
   font-size: 0.99925rem;
   line-height: 1;
   background-color: transparent;
@@ -10480,7 +10480,7 @@ img {
 @media screen and (max-width: 991px) {
   .navbar .container-fluid {
     padding-right: 15px;
-    padding-left: 15px; }
+    padding-left: 0px; }
   .navbar .navbar-collapse .input-group {
     margin: 0;
     margin-top: 5px; }
@@ -10535,7 +10535,7 @@ img {
     color: #ffffff; }
   .navbar.bg-white .dropdown-menu .dropdown-item:focus,
   .navbar.bg-white .dropdown-menu .dropdown-item:hover {
-    color: #344675; }
+    color: #ffffff; }
   .navbar button.navbar-toggler[data-target="#navigation"] {
     padding-top: 0; }
   .navbar .navbar-toggler-bar {
@@ -10544,7 +10544,7 @@ img {
     width: 22px;
     height: 1px;
     border-radius: 1px;
-    background: #ffffff; }
+    background: #ffffff !important; }
     .navbar .navbar-toggler-bar.navbar-kebab {
       height: 4px;
       width: 4px;
@@ -10558,7 +10558,7 @@ img {
       width: 17px;
       transition: width .2s linear; }
   .navbar.bg-white:not(.navbar-transparent) .navbar-toggler-bar {
-    background-color: #344675; }
+    background-color: #ffffff; }
   .navbar .toggled .navbar-toggler-bar {
     width: 24px; }
     .navbar .toggled .navbar-toggler-bar + .navbar-toggler-bar {
@@ -10732,7 +10732,7 @@ p {
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 5px; }
   p.description {
-    font-size: 1.14em; }
+    font-size: 1em; }
 
 .title {
   font-weight: 600; }
@@ -13608,4 +13608,13 @@ Copyright (c) 2015 Daniel Eden
 .com-text-container p{
   color: white !important;
   text-align: justify;
+}
+
+.check-complexity-button-col{
+  margin-bottom: 1.5rem;
+  text-align: right;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }

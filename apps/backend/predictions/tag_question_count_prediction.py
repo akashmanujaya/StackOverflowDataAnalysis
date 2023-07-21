@@ -64,7 +64,6 @@ class TagQuestionPredictor:
             day_count = Question.objects(tags=tag, creation_date__gte=day,
                                          creation_date__lt=day + timedelta(days=1)).count()
             actual_data_list.append(day_count)
-        print(f"This is actual data list for tag {tag} and data is {actual_data_list}")
         return actual_data_list
 
     def predict_and_save(self):
@@ -81,7 +80,7 @@ class TagQuestionPredictor:
             tag = os.path.splitext(model_file)[0].replace('_prediction_model', '')  # remove .pkl extension and '_prediction_model' to get the tag name
             with open(os.path.join(self.models_dir, model_file), 'rb') as file:
                 model = pickle.load(file)
-                forecast = [round(x) for x in model.forecast(steps=30)]
+                forecast = [round(x) for x in model.forecast(steps=15)]
                 actual_data = self.get_actual_data(tag)
 
                 # Store in dictionary
@@ -91,19 +90,22 @@ class TagQuestionPredictor:
                 }
 
         file_path = os.path.join(self.data_file_path, 'prediction_results.json')
-        print(f"comes here and file path: {file_path}")
+
         # Save dictionary to JSON file
         with open(file_path, 'w') as file:
             json.dump(prediction_results, file)
 
     def run(self):
         try:
+            self.predict_and_save()
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    def train_models(self):
+        try:
             data = self.get_data_from_db()
             data = self.prepare_data(data)
             models = self.train_model(data)
             self.save_models(models)
-
-            # After saving models
-            self.predict_and_save()
         except Exception as e:
             print(f"An error occurred: {e}")

@@ -1,12 +1,6 @@
 from apps.home import blueprint
-from flask import render_template, request, jsonify
-import json
+from flask import render_template, request
 from apps.backend.api import *
-
-
-@blueprint.route('/about-us')
-def test():
-    return render_template('home/about.html', segment='about')
 
 
 @blueprint.route('/')
@@ -27,6 +21,11 @@ def predictions():
 @blueprint.route('/ngram')
 def ngrqm():
     return render_template('home/ngram_viewer.html', segment='ngram')
+
+
+@blueprint.route('/about-us')
+def test():
+    return render_template('home/about.html', segment='about')
 
 
 @blueprint.route('/api/get_coverage')
@@ -140,6 +139,21 @@ def prediction_results():
         return get_prediction_results()
     except Exception as ex:
         return jsonify({'error': f'Something went wrong: {ex}'}), 500
+
+
+@blueprint.app_errorhandler(403)
+def forbidden(error):
+    return render_template('home/errors/403.html'), 403
+
+
+@blueprint.app_errorhandler(404)
+def page_not_found(error):
+    return render_template('home/errors/404.html'), 404
+
+
+@blueprint.app_errorhandler(500)
+def internal_server_error(error):
+    return render_template('home/errors/500.html'), 500
 
 
 # Helper - Extract current page name from request
