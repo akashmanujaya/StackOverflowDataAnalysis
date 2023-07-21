@@ -412,6 +412,40 @@ def generate_topic_coverage():
         file.write(json.dumps(results))
 
 
+@celery_app.task(name="apps.backend.services.tasks.calculate_summary")
+def calculate_summary():
+    # Calculate total number of questions
+    total_questions = Question.objects.count()
+
+    # Calculate total number of users
+    total_users = User.objects.count()
+
+    # Calculate total number of tags
+    total_tags = 86
+
+    # Calculate complexity score trend (assuming average of all questions)
+    total_complexity_score = 0
+    for question in Question.objects:
+        if question.complexity_score is not None:
+            total_complexity_score += question.complexity_score
+    complexity_score_trend = total_complexity_score / total_questions if total_questions != 0 else 0
+
+    # Prepare the summary data
+    summary_data = {
+        'total_questions': total_questions,
+        'total_users': total_users,
+        'total_tags': total_tags,
+        'complexity_score_trend': complexity_score_trend
+    }
+
+    # Define the file path
+    file_path = os.path.join(data_file_path, 'summary_data.json')
+
+    # Save the summary data to a JSON file
+    with open(file_path, 'w') as file:
+        file.write(json.dumps(summary_data))
+
+
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data():
     # Initialize a DatabaseManager instance with your database credentials
@@ -521,3 +555,6 @@ def fetch_data():
 
     # Invoke update_complexity_score when fetch_data finishes
     generate_topic_coverage.delay()
+
+    # Invoke update_complexity_score when fetch_data finishes
+    calculate_summary.delay()

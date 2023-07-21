@@ -13279,29 +13279,29 @@ Copyright (c) 2015 Daniel Eden
       height: 100px;
       width: 250px; }
       .card-user .author .block.block-one {
-        background: rgba(225, 78, 202, 0.6);
-        background: linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+        background: rgb(250, 139, 44);
+        background: linear-gradient(to right, rgb(250, 139, 44) 0%, rgba(225, 78, 202, 0) 100%);
         filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=10);
         transform: rotate(150deg);
         margin-top: -90px;
         margin-left: -50px; }
       .card-user .author .block.block-two {
-        background: rgba(225, 78, 202, 0.6);
-        background: linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+        background: rgb(250, 139, 44);
+        background: linear-gradient(to right, rgb(250, 139, 44) 0%, rgba(225, 78, 202, 0) 100%);
         filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=10);
         transform: rotate(30deg);
         margin-top: -40px;
         margin-left: -100px; }
       .card-user .author .block.block-three {
-        background: rgba(225, 78, 202, 0.6);
-        background: linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+        background: rgb(250, 139, 44);
+        background: linear-gradient(to right, rgb(250, 139, 44) 0%, rgba(225, 78, 202, 0) 100%);
         filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=10);
         transform: rotate(170deg);
         margin-top: -70px;
         right: -45px; }
       .card-user .author .block.block-four {
-        background: rgba(225, 78, 202, 0.6);
-        background: linear-gradient(to right, rgba(225, 78, 202, 0.6) 0%, rgba(225, 78, 202, 0) 100%);
+        background: rgb(250, 139, 44);
+        background: linear-gradient(to right, rgb(250, 139, 44) 0%, rgba(225, 78, 202, 0) 100%);
         filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=10);
         transform: rotate(150deg);
         margin-top: -25px;
@@ -13312,7 +13312,9 @@ Copyright (c) 2015 Daniel Eden
     border: 5px solid #2b3553;
     border-bottom-color: transparent;
     background-color: transparent;
-    position: relative; }
+    position: relative;
+    object-fit: cover;
+  }
   .card-user .card-body {
     min-height: 240px; }
   .card-user hr {
@@ -13507,4 +13509,103 @@ Copyright (c) 2015 Daniel Eden
 
 .bs-searchbox .form-control:focus {
     border-color: #fc701d !important;
+}
+
+/*Main cards css in dashboard*/
+
+.summery-cards .card {
+    background-color: #fff;
+    border-radius: 10px;
+    border: none;
+    position: relative;
+    margin-bottom: 30px;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90,97,105,0.1), 0 0.9375rem 1.40625rem rgba(90,97,105,0.1), 0 0.25rem 0.53125rem rgba(90,97,105,0.12), 0 0.125rem 0.1875rem rgba(90,97,105,0.1);
+}
+.summery-cards .l-bg-cherry {
+    background: linear-gradient(to right, #493240, #f09) !important;
+    color: #fff;
+}
+
+.summery-cards .l-bg-blue-dark {
+    background: linear-gradient(to right, #373b44, #4286f4) !important;
+    color: #fff;
+}
+
+.summery-cards .l-bg-green-dark {
+    background: linear-gradient(to right, #0a504a, #38ef7d) !important;
+    color: #fff;
+}
+
+.summery-cards .l-bg-orange-dark {
+    background: linear-gradient(to right, #a86008, #ffba56) !important;
+    color: #fff;
+}
+
+.summery-cards .card .card-statistic-3 .card-icon-large .fas, .card .card-statistic-3 .card-icon-large .far, .card .card-statistic-3 .card-icon-large .fab, .card .card-statistic-3 .card-icon-large .fal {
+    font-size: 110px;
+}
+
+.summery-cards .card .card-statistic-3 .card-icon {
+    text-align: center;
+    line-height: 50px;
+    margin-left: 15px;
+    color: #000;
+    position: absolute;
+    right: -5px;
+    top: 20px;
+    opacity: 0.1;
+}
+
+.summery-cards .l-bg-cyan {
+    background: linear-gradient(135deg, #289cf5, #84c0ec) !important;
+    color: #fff;
+}
+
+.summery-cards .l-bg-green {
+    background: linear-gradient(135deg, #23bdb8 0%, #43e794 100%) !important;
+    color: #fff;
+}
+
+.summery-cards .l-bg-orange {
+    background: linear-gradient(to right, #f9900e, #ffba56) !important;
+    color: #fff;
+}
+
+.summery-cards .l-bg-cyan {
+    background: linear-gradient(135deg, #289cf5, #84c0ec) !important;
+    color: #fff;
+}
+
+.card-chart .dropdown {
+    position: inherit !important;
+    right: 0 !important;
+    top: 0 !important;
+}
+
+.bootstrap-select .dropdown-menu li a span.text {
+  color: white;
+}
+
+.center-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grayscale {
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.grayscale:hover {
+    filter: grayscale(0%);
+}
+
+.modal.show .modal-dialog {
+  transform: none !important;
+}
+
+.com-text-container p{
+  color: white !important;
+  text-align: justify;
 }

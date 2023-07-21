@@ -10,6 +10,90 @@
 
 {% block content %}
 
+    <div class="row summery-cards">
+        <div class="col-md-12 ">
+            <div class="row ">
+                <!-- Total Questions Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card l-bg-cherry">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large"><i class="fas fa-question"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0">Total Number of Questions<br> Analyzed </h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-8">
+                                    <h2 id="total-questions" class="d-flex align-items-center mb-0">
+                                        <!-- Total questions will be inserted here -->
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Users Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card l-bg-blue-dark">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large"><i class="fas fa-users"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0">Total Number of Users <br> Analyzed</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-8">
+                                    <h2 id="total-users" class="d-flex align-items-center mb-0">
+                                        <!-- Total users will be inserted here -->
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Tags Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card l-bg-green-dark">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large"><i class="fas fa-tag"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0">Total Number of Tags <br> Analyzed</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-8">
+                                    <h2 id="total-tags" class="d-flex align-items-center mb-0">
+                                        <!-- Total tags will be inserted here -->
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complexity Score Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card l-bg-orange-dark">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large"><i class="fas fa-star"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0">Average Complexity <br> Score</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-8">
+                                    <h2 id="complexity-score" class="d-flex align-items-center mb-0">
+                                        <!-- Complexity score will be inserted here -->
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{#    Tag Trends graph#}
     <div class="row">
       <div class="col-12">
         <div class="card card-chart">
@@ -20,10 +104,9 @@
                 <h2 class="card-title d-none show-after-data-load">Tags Trend</h2>
               </div>
               <div class="col-sm-6 d-none show-after-data-load">
-                  <select class="form-control selectpicker" data-live-search="true" id="tag-selector"></select>
-{#                <select class="form-control" id="tag-selector">#}
-{#                  <!-- tag options will be populated here -->#}
-{#                </select>#}
+                  <select class="form-control selectpicker" data-live-search="true" id="tag-selector">
+                       <!-- tag options will be populated here -->#}
+                  </select>
               </div>
             </div>
           </div>
@@ -40,6 +123,7 @@
       </div>
     </div>
 
+{#    Tag Coverage Table#}
     <div class="row">
         <div class="col-md-12">
             <div class="card ">
@@ -66,6 +150,7 @@
         </div>
     </div>
 
+{#    Top users and top Questions#}
     <div class="row">
         <!--Table-top 5 users -->
         <div class="col-lg-6 col-md-12 d-flex">
@@ -270,7 +355,24 @@
 
             });
 
+            // Get data for summary cards
+            $.getJSON('/api/get_summary', function(data) {
+                // Ensure data has been fetched correctly
+                if (data) {
+                    // Update summary cards
+                    $('#total-questions').text(formatNumber(data.total_questions));
+                    $('#total-users').text(formatNumber(data.total_users));
+                    $('#total-tags').text(formatNumber(data.total_tags));
+                    $('#complexity-score').text(data.complexity_score_trend.toFixed(2) + "%");
+                }
+            }).fail(function() {
+                console.log("An error occurred while fetching summary data.");
+            });
 
+            // Function to format numbers (add 'K' for thousands)
+            function formatNumber(num) {
+                return num > 999 ? (num/1000).toFixed(1) + 'K' : num
+            }
         });
     </script>
 

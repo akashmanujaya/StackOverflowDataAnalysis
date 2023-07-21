@@ -1,10 +1,8 @@
 from dotenv import load_dotenv
-from mongoengine import connect
 from pymongo import UpdateOne
 from textblob import TextBlob
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
-from urllib.parse import quote_plus
 from textstat import flesch_kincaid_grade, polysyllabcount
 from apps.backend.database import Question
 from mongoengine.errors import OperationError

@@ -4,9 +4,9 @@ import json
 from apps.backend.api import *
 
 
-@blueprint.route('/test')
+@blueprint.route('/about-us')
 def test():
-    return render_template('home/test.html', segment='test')
+    return render_template('home/about.html', segment='about')
 
 
 @blueprint.route('/')
@@ -33,6 +33,20 @@ def ngrqm():
 def get_coverage():
     try:
         coverage_data = calculate_tag_coverage()
+
+        if 'error' in coverage_data:
+            return coverage_data, 500
+
+        return jsonify(coverage_data)
+
+    except Exception as ex:
+        return jsonify({'error': f'Something went wrong: {ex}'}), 500
+
+
+@blueprint.route('/api/get_summary')
+def get_summary_cards_data():
+    try:
+        coverage_data = get_summary()
 
         if 'error' in coverage_data:
             return coverage_data, 500
