@@ -4,32 +4,37 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4687a5e9-c649-4471-a057-522cde98b6da" name="Changes" comment="Added about us section and explanation of complexity score">
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/img/avatars/nalin.jpg" afterDir="false" />
+    <list default="true" id="4687a5e9-c649-4471-a057-522cde98b6da" name="Changes" comment="Celery configuration issue fixed and erros pages added">
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/img/avatars/ranzy.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/img/favicon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/logo-black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/logo-white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/eps/logo-black.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/eps/logo-color.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/eps/logo-no-background.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/eps/logo-white.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/pdf/logo-black.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/pdf/logo-color.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/pdf/logo-no-background.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/pdf/logo-white.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/png/logo-black.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/png/logo-color.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/png/logo-no-background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/png/logo-white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/svg/logo-black.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/svg/logo-color.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/svg/logo-no-background.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/svg/logo-white.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/clients/crossvalidated_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/clients/crossvalidated_client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/clients/stackoverflow_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/clients/stackoverflow_client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/summary_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/summary_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tag_coverage.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_coverage.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/predictions/question_score_prediction_model.pkl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/predictions/tag_question_count_prediction.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/predictions/tag_question_count_prediction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/services/celery_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/celery_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/services/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/home/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/home/routes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/static/assets/css/black-dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/css/black-dashboard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/img/avatars/asib.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/img/avatars/asib.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/logo/logo-color.png" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/logo/logo-color.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/static/assets/logo/logo-no-background.png" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/logo/logo-no-background.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/templates/home/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/about.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/templates/home/complexity.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/complexity.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/home/predictions.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/predictions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/celerybeat-schedule.db" beforeDir="false" afterPath="$PROJECT_DIR$/celerybeat-schedule.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/ngram_viewer.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/ngram_viewer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/page-user.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/layouts/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/layouts/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,6 +95,7 @@
       <recent name="$PROJECT_DIR$/apps/static/assets/img" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/templates/home/errors" />
       <recent name="$PROJECT_DIR$/apps/backend/data_files" />
       <recent name="$PROJECT_DIR$/apps/static/assets/js" />
       <recent name="$PROJECT_DIR$/apps/backend/clients" />
@@ -152,7 +158,8 @@
       <workItem from="1689168205229" duration="614000" />
       <workItem from="1689638366900" duration="6127000" />
       <workItem from="1689722768787" duration="2000" />
-      <workItem from="1689886613000" duration="16950000" />
+      <workItem from="1689886613000" duration="17970000" />
+      <workItem from="1690025001401" duration="4859000" />
     </task>
     <task id="LOCAL-00001" summary="Database changed to MongoDB and created two tables for dashbaord">
       <created>1686614472641</created>
@@ -245,7 +252,14 @@
       <option name="project" value="LOCAL" />
       <updated>1689900275471</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Celery configuration issue fixed and erros pages added">
+      <created>1689908036061</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1689908036061</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -277,10 +291,11 @@
     <MESSAGE value="Tag Coverage added to main dashboard" />
     <MESSAGE value="Tag coverage JSON file added" />
     <MESSAGE value="Added about us section and explanation of complexity score" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added about us section and explanation of complexity score" />
+    <MESSAGE value="Celery configuration issue fixed and erros pages added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Celery configuration issue fixed and erros pages added" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1689902480248" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1689907853902" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1688431650658" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/predictions" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$tasks.coverage" NAME="tasks Coverage Results" MODIFIED="1687702491316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/services" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$question_score_prediction.coverage" NAME="question_score_prediction Coverage Results" MODIFIED="1688044416329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/predictions" />

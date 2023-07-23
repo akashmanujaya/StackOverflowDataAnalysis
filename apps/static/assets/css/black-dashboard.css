@@ -10735,7 +10735,14 @@ p {
     font-size: 1em; }
 
 .title {
-  font-weight: 600; }
+  font-weight: 600;
+  font-size: x-large;
+  margin-bottom: 0px;
+}
+
+.email{
+  margin-top: 10px;
+}
   .title.title-up {
     text-transform: uppercase; }
     .title.title-up a {
