@@ -4,37 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4687a5e9-c649-4471-a057-522cde98b6da" name="Changes" comment="Celery configuration issue fixed and erros pages added">
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/img/avatars/ranzy.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/img/favicon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/logo-black.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/logo-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/eps/logo-black.eps" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/eps/logo-color.eps" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/eps/logo-no-background.eps" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/eps/logo-white.eps" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/pdf/logo-black.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/pdf/logo-color.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/pdf/logo-no-background.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/pdf/logo-white.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/png/logo-black.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/png/logo-color.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/png/logo-no-background.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/png/logo-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/svg/logo-black.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/svg/logo-color.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/svg/logo-no-background.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/static/assets/logo/overflowstats-logo-zip-file/svg/logo-white.svg" afterDir="false" />
+    <list default="true" id="4687a5e9-c649-4471-a057-522cde98b6da" name="Changes" comment="Added remainning portfolio and update the logo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/static/assets/css/black-dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/css/black-dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/static/assets/img/avatars/asib.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/img/avatars/asib.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/static/assets/logo/logo-color.png" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/logo/logo-color.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/static/assets/logo/logo-no-background.png" beforeDir="false" afterPath="$PROJECT_DIR$/apps/static/assets/logo/logo-no-background.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/home/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/about.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/home/complexity.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/complexity.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/home/ngram_viewer.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/ngram_viewer.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/home/page-user.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/layouts/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/layouts/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/predictions.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/predictions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +132,9 @@
       <workItem from="1689638366900" duration="6127000" />
       <workItem from="1689722768787" duration="2000" />
       <workItem from="1689886613000" duration="17970000" />
-      <workItem from="1690025001401" duration="4859000" />
+      <workItem from="1690025001401" duration="5051000" />
+      <workItem from="1690286762823" duration="2190000" />
+      <workItem from="1690381849474" duration="660000" />
     </task>
     <task id="LOCAL-00001" summary="Database changed to MongoDB and created two tables for dashbaord">
       <created>1686614472641</created>
@@ -259,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1689908036061</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Added remainning portfolio and update the logo">
+      <created>1690107378583</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1690107378583</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -292,7 +274,8 @@
     <MESSAGE value="Tag coverage JSON file added" />
     <MESSAGE value="Added about us section and explanation of complexity score" />
     <MESSAGE value="Celery configuration issue fixed and erros pages added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Celery configuration issue fixed and erros pages added" />
+    <MESSAGE value="Added remainning portfolio and update the logo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added remainning portfolio and update the logo" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1689907853902" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

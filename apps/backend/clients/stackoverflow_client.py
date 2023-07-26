@@ -38,15 +38,16 @@ class StackOverflowClient:
             try:
                 for page in range(1, self.MAX_PAGES + 1):
                     data = self.fetch_questions(page, tag)
-                    if 'items' in data:
-                        yield data['items']
-                        if not data['has_more']:
-                            break
-                    # Check remaining quota and pause if it's low
-                    if 'quota_remaining' in data and data['quota_remaining'] < 10:
-                        print('Quota remaining is low. Sleeping for 10 seconds...')
-                        time.sleep(10)
-                    time.sleep(1)
+                    if data is not None:  # Check if data is not None
+                        if 'items' in data:
+                            yield data['items']
+                            if not data['has_more']:
+                                break
+                        # Check remaining quota and pause if it's low
+                        if 'quota_remaining' in data and data['quota_remaining'] < 10:
+                            print('Quota remaining is low. Sleeping for 10 seconds...')
+                            time.sleep(10)
+                        time.sleep(1)
             except (ValueError, KeyError, Exception) as ex:
                 print(f"Something happened: {ex}")
                 continue
