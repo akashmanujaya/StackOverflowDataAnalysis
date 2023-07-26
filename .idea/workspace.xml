@@ -6,8 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="4687a5e9-c649-4471-a057-522cde98b6da" name="Changes" comment="Added remainning portfolio and update the logo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/templates/home/predictions.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/predictions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/summary_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/summary_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tag_coverage.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_coverage.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +142,7 @@
       <workItem from="1689886613000" duration="17970000" />
       <workItem from="1690025001401" duration="5051000" />
       <workItem from="1690286762823" duration="2190000" />
-      <workItem from="1690381849474" duration="660000" />
+      <workItem from="1690381849474" duration="1889000" />
     </task>
     <task id="LOCAL-00001" summary="Database changed to MongoDB and created two tables for dashbaord">
       <created>1686614472641</created>
@@ -278,7 +286,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added remainning portfolio and update the logo" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1689907853902" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1690383037204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1688431650658" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/predictions" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$tasks.coverage" NAME="tasks Coverage Results" MODIFIED="1687702491316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/services" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$question_score_prediction.coverage" NAME="question_score_prediction Coverage Results" MODIFIED="1688044416329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/predictions" />

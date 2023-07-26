@@ -23,5 +23,5 @@ if DEBUG:
     app.logger.info('Environment = ' + get_config_mode)
 
 if __name__ == "__main__":
-    app.run(host='10.167.156.220', port=80)
+    app.run(host='0.0.0.0', port=80)
 
