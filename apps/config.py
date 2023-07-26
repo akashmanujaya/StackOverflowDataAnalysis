@@ -17,8 +17,8 @@ class Config(object):
         'db': os.environ["MONGO_DB_NAME"],
         'host': os.environ["MONGO_DB_HOST"],
         'port': int(os.environ["MONGO_DB_PORT"]),
-        # 'username': os.environ["MONGO_DB_USER"],
-        # 'password': os.environ["MONGO_DB_PASSWORD"]
+        'username': os.environ["MONGO_DB_USER"],
+        'password': os.environ["MONGO_DB_PASSWORD"]
     }
 
 
@@ -47,12 +47,11 @@ def initiate_connection():
     mongodb_settings = con.MONGODB_SETTINGS
 
     disconnect()
-    # connect(host=f"mongodb+srv://{mongodb_settings['username']}:{mongodb_settings['password']}@{mongodb_settings['host']}/{mongodb_settings['db']}?retryWrites=true&w=majority")
     connect(
         db=mongodb_settings['db'],  # Replace with your database name
-        host='localhost',  # Replace with your MongoDB server host
-        port=27017,  # Replace with your MongoDB server port
-        # username='your_username',  # Replace with your MongoDB username if required
-        # password='your_password',  # Replace with your MongoDB password if required
+        host=mongodb_settings['host'],  # Replace with your MongoDB server host
+        port=mongodb_settings['port'],  # Replace with your MongoDB server port
+        username=mongodb_settings['username'],  # Replace with your MongoDB username if required
+        password=mongodb_settings['password'],  # Replace with your MongoDB password if required
     )
 
