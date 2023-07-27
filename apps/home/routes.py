@@ -1,5 +1,7 @@
+from datetime import datetime, timedelta
+
 from apps.home import blueprint
-from flask import render_template, request
+from flask import render_template, request, current_app, make_response
 from apps.backend.api import *
 
 
@@ -141,6 +143,25 @@ def prediction_results():
         return jsonify({'error': f'Something went wrong: {ex}'}), 500
 
 
+@blueprint.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    """Generate sitemap.xml. Makes a list of urls and date modified."""
+    pages = []
+    ten_days_ago = (datetime.now() - timedelta(days=7)).isoformat() + 'Z'  # 'Z' indicates UTC time
+    # static pages
+    for rule in current_app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments) == 0:
+            pages.append(
+                [rule.rule, ten_days_ago]
+            )
+
+    sitemap_xml = render_template('sitemap_template.xml', pages=pages)
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
+
+
 @blueprint.app_errorhandler(403)
 def forbidden(error):
     return render_template('home/errors/403.html'), 403
@@ -168,3 +189,6 @@ def get_segment(req):
 
     except:
         return None
+
+
+

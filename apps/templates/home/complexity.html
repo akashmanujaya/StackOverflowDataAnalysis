@@ -1,6 +1,22 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Complexity {% endblock %}
+{% block meta %}
+    <title>Complexity Score | Data Analytics Tool</title>
+    <meta name="description" content="Understand the complexity of questions with our detailed complexity score analysis. Dive into our advanced features and make data-driven decisions.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Complexity Analysis - Analyze StackOverflow and CrossValidated Trends" />
+    <meta property="og:description" content="Dive into our complexity score analyses of Stack Overflow questions and learn about the various factors contributing to their complexity." />
+    <meta property="og:url" content="https://overflowstats.com/complexity" />
+    <meta property="og:image" content="https://overflowstats.com/static/assets/logo/logo-black.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Complexity Analysis - Analyze Stack Overflow Trends">
+    <meta name="twitter:description" content="Dive into our complexity score analyses of StackOverflow and CrossValidated questions and learn about the various factors contributing to their complexity.">
+    <meta name="twitter:image" content="https://overflowstats.com/static/assets/logo/logo-black.png" />
+
+{% endblock meta %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}

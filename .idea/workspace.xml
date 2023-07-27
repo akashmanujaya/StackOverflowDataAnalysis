@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="change task shedule time">
+    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="change task schedule time and remove log for fetch data">
+      <change afterPath="$PROJECT_DIR$/robots.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/services/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/about.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/complexity.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/complexity.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/ngram_viewer.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/ngram_viewer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/home/predictions.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/home/predictions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/layouts/base-rtl.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/templates/layouts/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/templates/layouts/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prediction_results.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +202,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690471559189</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="change task schedule time and remove log for fetch data">
+      <created>1690472176765</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1690472176765</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -209,7 +224,8 @@
     <MESSAGE value="celery task schedule time change changed" />
     <MESSAGE value="add disconnect_all to database initiation" />
     <MESSAGE value="change task shedule time" />
-    <option name="LAST_COMMIT_MESSAGE" value="change task shedule time" />
+    <MESSAGE value="change task schedule time and remove log for fetch data" />
+    <option name="LAST_COMMIT_MESSAGE" value="change task schedule time and remove log for fetch data" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1690383037204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

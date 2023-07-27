@@ -1,6 +1,23 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Prediction {% endblock %}
+{% block meta %}
+    <title>Predictions | Advanced Data Forecasting Tool</title>
+    <meta name="description" content="Gain insights into future question count with our data forecasting feature. Use our prediction tool for better planning and strategy learning.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Tag Predictions - Analyze StackOverflow and CrossValidated Trends" />
+    <meta property="og:description" content="Get predictions for popular Stack Overflow tags based on past data trends." />
+    <meta property="og:url" content="https://overflowstats.com/predictions" />
+    <meta property="og:image" content="https://overflowstats.com/static/assets/logo/logo-black.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tag Predictions - Analyze Stack Overflow Trends">
+    <meta name="twitter:description" content="Get predictions for popular StackOverflow and CrossValidated tags based on past data trends.">
+    <meta name="twitter:image" content="https://overflowstats.com/static/assets/logo/logo-black.png" />
+
+{% endblock meta %}
+
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}

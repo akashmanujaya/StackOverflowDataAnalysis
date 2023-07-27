@@ -1,11 +1,27 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block meta %}
+    <title>Home | Comprehensive Data Analytics Tool</title>
+    <meta name="description" content="Access powerful data analytics across StackOverflow and CrossValidated, including complexity analysis, predictions, and n-gram viewer. Explore more about our features.">
+{% endblock meta %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" rel="stylesheet" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Home - Analyze Stack Exchange Trends" />
+    <meta property="og:description" content="Explore, analyze, and uncover insights about Stack Overflow trends, tag coverage, complexity scores, and more." />
+    <meta property="og:url" content="https://overflowstats.com" />
+    <meta property="og:image" content="https://overflowstats.com/static/assets/logo/logo-black.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Home - Analyze Stack Exchange Trends">
+    <meta name="twitter:description" content="Explore, analyze, and uncover insights about StackOverflow and CrossValidated trends, tag coverage, complexity scores, and more.">
+    <meta name="twitter:image" content="https://overflowstats.com/static/assets/logo/logo-black.png" />
+
 {% endblock stylesheets %}
 
 {% block content %}

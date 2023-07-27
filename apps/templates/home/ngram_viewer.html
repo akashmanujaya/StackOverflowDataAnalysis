@@ -1,6 +1,23 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} NGram {% endblock %}
+
+{% block meta %}
+    <title>N-gram Viewer | Powerful Tag Analysis Tool</title>
+    <meta name="description" content="Visualize and analyze question tag data effectively with our N-gram Viewer. Discover patterns, trends, and gain deeper insights into your textual data.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="N-gram Viewer - Analyze Stack Overflow Trends" />
+    <meta property="og:description" content="Discover the N-gram patterns in StackOverflow and CrossValidated posts and gain insights into the evolving trends of discussions." />
+    <meta property="og:url" content="https://overflowstats.com/ngram" />
+    <meta property="og:image" content="https://overflowstats.com/static/assets/logo/logo-black.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="N-gram Viewer - Analyze Stack Overflow Trends">
+    <meta name="twitter:description" content="Discover the N-gram patterns in StackOverflow and CrossValidated posts and gain insights into the evolving trends of discussions.">
+    <meta name="twitter:image" content="https://overflowstats.com/static/assets/logo/logo-black.png" />
+
+{% endblock meta %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
