@@ -42,6 +42,7 @@ data_file_path = os.getenv('DATA_FILE_PATH')
 
 # Initialize Celery
 celery_app = Celery(__name__, broker='pyamqp://guest@localhost//')
+celery_app.conf.timezone = 'Europe/London'
 
 # Update tags length every hour
 celery_app.conf.beat_schedule = CeleryConfig.CELERY_BEAT_SCHEDULE
