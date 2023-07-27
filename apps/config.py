@@ -43,7 +43,6 @@ config_dict = {
 
 
 def initiate_connection():
-    print("comes here")
     con = Config()
     mongodb_settings = con.MONGODB_SETTINGS
 

@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="authentication_source">
-      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="celery task shedule changed">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,7 +165,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690465857416</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="celery task shedule changed">
+      <created>1690467632506</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1690467632506</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -178,7 +183,8 @@
     <MESSAGE value="config files changed" />
     <MESSAGE value="celery timezone changed" />
     <MESSAGE value="authentication_source" />
-    <option name="LAST_COMMIT_MESSAGE" value="authentication_source" />
+    <MESSAGE value="celery task shedule changed" />
+    <option name="LAST_COMMIT_MESSAGE" value="celery task shedule changed" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1690383037204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -188,7 +194,7 @@
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$tag_question_count_prediction.coverage" NAME="tag_question_count_prediction Coverage Results" MODIFIED="1688459257051" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/predictions" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$text.coverage" NAME="text Coverage Results" MODIFIED="1687702279759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/services" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$test.coverage" NAME="test Coverage Results" MODIFIED="1688430953852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/predictions" />
-    <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$main.coverage" NAME="main Coverage Results" MODIFIED="1690467283500" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1690467311410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$main.coverage" NAME="main Coverage Results" MODIFIED="1690467444716" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
