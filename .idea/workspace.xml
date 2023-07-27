@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="Add seo meta tags, robots.txt and sitemap_template.xml">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="changed Open Graph tag posotions" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -207,7 +205,21 @@
       <option name="project" value="LOCAL" />
       <updated>1690491223963</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="change canonical tag">
+      <created>1690491654477</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1690491654477</updated>
+    </task>
+    <task id="LOCAL-00015" summary="changed Open Graph tag posotions">
+      <created>1690491755640</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1690491755640</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -224,7 +236,9 @@
     <MESSAGE value="change task shedule time" />
     <MESSAGE value="change task schedule time and remove log for fetch data" />
     <MESSAGE value="Add seo meta tags, robots.txt and sitemap_template.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add seo meta tags, robots.txt and sitemap_template.xml" />
+    <MESSAGE value="change canonical tag" />
+    <MESSAGE value="changed Open Graph tag posotions" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed Open Graph tag posotions" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1690383037204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
