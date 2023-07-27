@@ -143,7 +143,7 @@ def prediction_results():
         return jsonify({'error': f'Something went wrong: {ex}'}), 500
 
 
-@blueprint.route('/sitemap.xml', methods=['GET'])
+@blueprint.route('/sitemap.xml')
 def sitemap():
     """Generate sitemap.xml. Makes a list of urls and date modified."""
     pages = []
