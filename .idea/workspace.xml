@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="celery task schedule time change changed">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="add disconnect_all to database initiation">
+      <change beforePath="$PROJECT_DIR$/apps/backend/services/celery_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/celery_config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,7 +179,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690468955797</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="add disconnect_all to database initiation">
+      <created>1690470459350</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1690470459350</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -192,7 +199,8 @@
     <MESSAGE value="authentication_source" />
     <MESSAGE value="celery task shedule changed" />
     <MESSAGE value="celery task schedule time change changed" />
-    <option name="LAST_COMMIT_MESSAGE" value="celery task schedule time change changed" />
+    <MESSAGE value="add disconnect_all to database initiation" />
+    <option name="LAST_COMMIT_MESSAGE" value="add disconnect_all to database initiation" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1690383037204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

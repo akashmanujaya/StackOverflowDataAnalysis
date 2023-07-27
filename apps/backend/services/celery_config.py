@@ -10,7 +10,7 @@ class CeleryConfig:
     CELERY_BEAT_SCHEDULE = {
         'fetch_data': {
             'task': 'apps.backend.services.tasks.fetch_data',
-            'schedule': crontab(minute='*/2'),  # Run every 2 minutes,  # Run at 1 AM GMT every day
+            'schedule': crontab(hour=16, minute=30),
         },
         'train_tag_predictions': {
             'task': 'apps.backend.services.tasks.train_tag_predictions',
