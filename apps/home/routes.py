@@ -143,6 +143,11 @@ def prediction_results():
         return jsonify({'error': f'Something went wrong: {ex}'}), 500
 
 
+@blueprint.route('/robots.txt')
+def serve_robots_file():
+    return current_app.send_static_file('robots.txt')
+
+
 @blueprint.route('/sitemap.xml')
 def sitemap():
     """Generate sitemap.xml. Makes a list of urls and date modified."""
@@ -189,6 +194,3 @@ def get_segment(req):
 
     except:
         return None
-
-
-
