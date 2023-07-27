@@ -17,10 +17,25 @@ import numpy as np
 from pandas import DataFrame
 from scipy import stats
 from celery import chain
-
+import logging
 
 # Load .env file
 load_dotenv()
+
+# Set up logger
+logger = logging.getLogger('fetch_data_logger')
+logger.setLevel(logging.INFO)
+
+# Create a file handler
+handler = logging.FileHandler('fetch_data.log')
+handler.setLevel(logging.INFO)
+
+# Create a logging format
+formatter = logging.Formatter('%(asctime)s - %(message)s')
+handler.setFormatter(formatter)
+
+# Add the handlers to the logger
+logger.addHandler(handler)
 
 # This gives you the relative path from environment variable
 data_file_path = os.getenv('DATA_FILE_PATH')
@@ -30,7 +45,6 @@ celery_app = Celery(__name__, broker='pyamqp://guest@localhost//')
 
 # Update tags length every hour
 celery_app.conf.beat_schedule = CeleryConfig.CELERY_BEAT_SCHEDULE
-
 
 # Establish a connection to the MongoDB server
 config.initiate_connection()
@@ -456,6 +470,8 @@ def calculate_summary(previous_task_result=None):
 
 @celery_app.task(name="apps.backend.services.tasks.fetch_data")
 def fetch_data(previous_task_result=None):
+    logger.info('fetch_data function started')
+
     # Initialize a DatabaseManager instance with your database credentials
     db_manager = DatabaseManager()
 
@@ -503,7 +519,6 @@ def fetch_data(previous_task_result=None):
                     db_manager.insert_question(question, tags)
             except Exception as ex:
                 print(f"Error Occurred from fetch_data function stackoverflow_client: {ex}")
-                break
 
     for items in cross_validated_client.fetch_all_questions():
         for question in items:
@@ -529,7 +544,6 @@ def fetch_data(previous_task_result=None):
                     db_manager.insert_question(question, tags)
             except Exception as ex:
                 print(f"Error Occurred from fetch_data function cross_validated_client: {ex}")
-                break
 
     chain(
         update_tags_length.s(),
