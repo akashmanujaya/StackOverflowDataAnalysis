@@ -10,7 +10,7 @@ class CeleryConfig:
     CELERY_BEAT_SCHEDULE = {
         'fetch_data': {
             'task': 'apps.backend.services.tasks.fetch_data',
-            'schedule': crontab(hour=16, minute=30),
+            'schedule': crontab(minute='*/5')
         },
         'train_tag_predictions': {
             'task': 'apps.backend.services.tasks.train_tag_predictions',
