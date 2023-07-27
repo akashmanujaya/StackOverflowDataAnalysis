@@ -51,7 +51,7 @@ def initiate_connection():
         db=mongodb_settings['db'],  # Replace with your database name
         host=mongodb_settings['host'],  # Replace with your MongoDB server host
         port=mongodb_settings['port'],  # Replace with your MongoDB server port
-        username=mongodb_settings['username'],  # Replace with your MongoDB username if required
-        password=mongodb_settings['password'],  # Replace with your MongoDB password if required
+        # username=mongodb_settings['username'],  # Replace with your MongoDB username if required
+        # password=mongodb_settings['password'],  # Replace with your MongoDB password if required
     )
 
