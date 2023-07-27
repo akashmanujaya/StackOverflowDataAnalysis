@@ -1,7 +1,7 @@
 import os
 from decouple import config
 from dotenv.main import load_dotenv
-from mongoengine import connect, disconnect
+from mongoengine import connect, disconnect_all
 
 load_dotenv()
 
@@ -47,7 +47,7 @@ def initiate_connection():
     mongodb_settings = con.MONGODB_SETTINGS
 
     try:
-        disconnect()
+        disconnect_all()
         connect(
             db=mongodb_settings['db'],
             host=mongodb_settings['host'],
