@@ -4,18 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="config files changed">
+    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="celery timezone changed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/summary_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/summary_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tag_coverage.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_coverage.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/backend/services/celery_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/celery_config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690464546839</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="celery timezone changed">
+      <created>1690465114882</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1690465114882</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -170,7 +178,8 @@
     <MESSAGE value="Add logger for fetch_data function" />
     <MESSAGE value="add logger to fetch_data function" />
     <MESSAGE value="config files changed" />
-    <option name="LAST_COMMIT_MESSAGE" value="config files changed" />
+    <MESSAGE value="celery timezone changed" />
+    <option name="LAST_COMMIT_MESSAGE" value="celery timezone changed" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1690383037204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
