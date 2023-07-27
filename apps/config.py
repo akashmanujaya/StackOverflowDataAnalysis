@@ -43,16 +43,20 @@ config_dict = {
 
 
 def initiate_connection():
+    print("comes here")
     con = Config()
     mongodb_settings = con.MONGODB_SETTINGS
 
-    disconnect()
-    connect(
-        db=mongodb_settings['db'],  # Replace with your database name
-        host=mongodb_settings['host'],  # Replace with your MongoDB server host
-        port=mongodb_settings['port'],  # Replace with your MongoDB server port
-        username=mongodb_settings['username'],  # Replace with your MongoDB username if required
-        password=mongodb_settings['password'],  # Replace with your MongoDB password if required
-        authentication_source='stack_exchange_analysis'
-    )
+    try:
+        disconnect()
+        connect(
+            db=mongodb_settings['db'],
+            host=mongodb_settings['host'],
+            port=mongodb_settings['port'],
+            username=mongodb_settings['username'],
+            password=mongodb_settings['password'],
+            authentication_source=mongodb_settings['db'],
+        )
+    except Exception as ex:
+        print(f"Error: {ex}")
 
