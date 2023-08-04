@@ -127,7 +127,7 @@ class ComplexityAnalyzer:
             print(f"An error occurred while updating question complexity: {e}")
 
     def save_complexity_score(self):
-        scores = [item['complexity_score'] for item in Question.objects().only('complexity_score')]
+        scores = [item['complexity_score'] for item in Question.objects().only('complexity_score') if item['complexity_score'] is not None]
 
         # Set up the bins for the histogram
         bins = np.linspace(0, 1, 11)  # create 10 equally spaced bins between 0 and 1

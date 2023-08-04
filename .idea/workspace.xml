@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="sitemap template slighly changed" />
+    <list default="true" id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="add route for robots.txt">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/clients/crossvalidated_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/clients/crossvalidated_client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/clients/stackoverflow_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/clients/stackoverflow_client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_quartile_over_time.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/complexity_score.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/prediction_results.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/score_complexity.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/summary_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/summary_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tag_coverage.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_coverage.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tag_percentages.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_and_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/data_files/tags_statistics.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/services/complexity_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/complexity_score.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/services/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/services/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,14 +30,33 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2TWW7x9f3G0rdzCMIcNE1f8ROK5" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "node.js.selected.package.tslint": "(autodetect)"
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/static" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="StackOverflowDataAnalysis copy" />
@@ -113,6 +149,7 @@
       <method v="2" />
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task id="LOCAL-00001" summary="workspace modified">
       <created>1690422224491</created>
@@ -240,8 +277,26 @@
       <option name="project" value="LOCAL" />
       <updated>1690494093332</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="add route for robots.txt">
+      <created>1690494447651</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1690494447651</updated>
+    </task>
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="98d23367-e8a7-476b-86bc-a7f6495ebedd" name="Changes" comment="add route for robots.txt" />
+      <created>1691159156239</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1691159156239</updated>
+      <workItem from="1691159157521" duration="2077000" />
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="workspace modified" />
@@ -262,7 +317,8 @@
     <MESSAGE value="og image changed" />
     <MESSAGE value="Google Analytics script added" />
     <MESSAGE value="sitemap template slighly changed" />
-    <option name="LAST_COMMIT_MESSAGE" value="sitemap template slighly changed" />
+    <MESSAGE value="add route for robots.txt" />
+    <option name="LAST_COMMIT_MESSAGE" value="add route for robots.txt" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$StackOverflowDataAnalysis_copy.coverage" NAME="StackOverflowDataAnalysis copy Coverage Results" MODIFIED="1690383037204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -273,6 +329,6 @@
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$text.coverage" NAME="text Coverage Results" MODIFIED="1687702279759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/services" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$test.coverage" NAME="test Coverage Results" MODIFIED="1688430953852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/backend/predictions" />
     <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$Flask__main_py_.coverage" NAME="Flask (main.py) Coverage Results" MODIFIED="1690467311410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$main.coverage" NAME="main Coverage Results" MODIFIED="1690493853530" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/StackOverflowDataAnalysis_copy$main.coverage" NAME="main Coverage Results" MODIFIED="1691165689247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

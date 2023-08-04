@@ -52,9 +52,9 @@ def initiate_connection():
             db=mongodb_settings['db'],
             host=mongodb_settings['host'],
             port=mongodb_settings['port'],
-            username=mongodb_settings['username'],
-            password=mongodb_settings['password'],
-            authentication_source=mongodb_settings['db'],
+            # username=mongodb_settings['username'],
+            # password=mongodb_settings['password'],
+            # authentication_source=mongodb_settings['db'],
         )
     except Exception as ex:
         print(f"Error: {ex}")
