@@ -5,7 +5,7 @@ import requests
 class StackOverflowClient:
     BASE_URL = 'https://api.stackexchange.com/2.2/questions'
     PAGE_SIZE = 100
-    MAX_PAGES = 7
+    MAX_PAGES = 5
 
     def __init__(self, tags, access_token, key):
         self.tags = tags
